@@ -13,7 +13,7 @@ function HomePage({ tableInfo }) {
       </thead>
       <tbody>
       {tableInfo.map((tableInfo) => (
-            <tr key={tableInfo}>
+            <tr key={tableInfo.symbol}>
               <td>
                 {tableInfo.symbol}
               </td>
