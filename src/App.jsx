@@ -15,6 +15,7 @@ function App() {
     axios.get(testApi).then((response) => {
       const tableInfo = response.data;
       setTableInfo(tableInfo);
+      console.log(tableInfo);
     });
   }, []);
 
@@ -23,7 +24,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage tableInfo={tableInfo}></HomePage>} />
-        <Route path="/new" element={<NewsPage></NewsPage>} />
+        <Route path="/news" element={<NewsPage></NewsPage>} />
+        <Route path="/news" element={<NewsPage></NewsPage>} />
       </Routes>
       
     </div>
