@@ -9,7 +9,6 @@ import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
 
 const testApi = "https://api.coincap.io/v2/assets";
-//const testApi = "https://api.blockchain.com/v3/exchange/tickers";
 
 const jsonServer = "http://localhost:3000/users";
 
@@ -19,19 +18,26 @@ npx json-server --watch db.json --port 3000
 
 function App() {
   const [tableInfo, setTableInfo] = useState([]);
+  const [previousTableInfo, setPreviousTableInfo] = useState([]);
   const [users, setUsers] = useState([]);
   const [loggedIn, setLoggedIn] = useState("");
 
   useEffect(() => {
     const fetchData = () => {
-      axios.get(testApi)
+      axios
+        .get(testApi)
         .then((response) => {
           const data = response.data;
-          console.log(data);
+          // Extract tje id and price from tableInfo previous state
+          const prevPrices = data.data.map((element) => ({
+            id: element.id,
+            priceUsd: element.priceUsd,
+          }));
+          setPreviousTableInfo(prevPrices);
           setTableInfo(data);
         })
         .catch((error) => {
-          console.error('Error fetching data:', error);
+          console.error("Error fetching data:", error);
         });
     };
 
