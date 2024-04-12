@@ -20,7 +20,7 @@ function HomePage({ tableInfo }) {
         <tr>
           <th>Rank</th>
           <th>Symbol</th>
-          <th>Price</th>
+          <th>Price in USD</th>
           <th>Volume</th>
           <th>% Change in 24h</th>
           <th>Actions</th>
@@ -31,7 +31,9 @@ function HomePage({ tableInfo }) {
           data.map((tableInfo) => (
             <tr key={tableInfo.id}>
               <td>{tableInfo.rank}</td>
-              <td>{tableInfo.symbol}</td>
+              <td style={{ textDecoration: 'none', color: 'inherit' }}>
+                <a href={tableInfo.explorer} target="_blank" rel="noopener noreferrer">{tableInfo.symbol}</a>
+              </td>
               <td>{parseFloat(tableInfo.priceUsd).toFixed(2)}</td>
               <td>{parseFloat(tableInfo.volumeUsd24Hr).toFixed(2)}</td>
               <td
