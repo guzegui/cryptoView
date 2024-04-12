@@ -1,20 +1,31 @@
-function Navbar() {
-    return (
-      <nav className="navbar navbar-dark bg-primary mb-3">
-        <div className="container">
-          <a className="navbar-brand" href="/">
-        Home
-          </a>
-          <a className="navbar-brand" href="/news">
+function Navbar({ loggedIn }) {
+  return (
+    <nav className="navbar navbar-dark bg-primary mb-3">
+      <div className="container">
+        <a className="navbar-brand" href="/">
+          Home
+        </a>
+        <a className="navbar-brand" href="/news">
           News
         </a>
+
+        {loggedIn == "" ? (
           <a className="navbar-brand" href="/signup">
-          Sign Up
-        </a>
-        </div>
-      </nav>
-    );
-  }
-  
-  export default Navbar;
-  
+            Sign Up
+          </a>
+        ) : (
+          <div>
+          <a className="navbar-brand" href="/dashboard">
+            Dashboard
+          </a>
+          <a className="navbar-brand" href="/">
+            Log Out
+          </a>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;
