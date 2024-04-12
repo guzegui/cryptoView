@@ -19,12 +19,14 @@ function HomePage({ tableInfo, previousTableInfo }) {
     // Separate first two decimals from the rest
     const firstTwoDecimals = decimalPart.slice(0, 2);
     const restDecimals = decimalPart.slice(2);
-    // Format first two decimals to normal size font
-    const formattedFirstTwoDecimals = `<span>${firstTwoDecimals}</span>`;
-    // Format rest of the decimals to smaller font size
-    const formattedRestDecimals = `<span style="font-size: smaller;">${restDecimals}</span>`;
-    // Combine integer, first two decimals, and formatted rest of the decimals
-    return `${formattedIntegerPart}.${formattedFirstTwoDecimals}(${formattedRestDecimals})`;
+    // Return formatted price parts as React elements
+    return (
+      <span>
+        <span className="integer">{formattedIntegerPart}</span>.
+        <span className="decimal">{firstTwoDecimals}</span>
+        <span className="small-decimal">{restDecimals}</span>
+      </span>
+    );
   }
 
   return (
@@ -61,11 +63,7 @@ function HomePage({ tableInfo, previousTableInfo }) {
                       {tableInfo.symbol}
                     </a>
                   </td>
-                  <td
-                    dangerouslySetInnerHTML={{
-                      __html: formatPrice(tableInfo.priceUsd),
-                    }}
-                  ></td>
+                  <td className="price">{formatPrice(tableInfo.priceUsd)}</td>
                   <td>{parseFloat(tableInfo.volumeUsd24Hr).toFixed(2)}</td>
                   <td
                     className={
