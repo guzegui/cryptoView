@@ -28,7 +28,8 @@ function App() {
         .get(testApi)
         .then((response) => {
           const data = response.data;
-          // Extract tje id and price from tableInfo previous state
+
+          // Extract the id and price from tableInfo previous state
           const prevPrices = data.data.map((element) => ({
             id: element.id,
             priceUsd: element.priceUsd,
@@ -68,7 +69,7 @@ function App() {
     <div>
       <Navbar loggedIn={loggedIn} />
       <Routes>
-        <Route path="/" element={<HomePage tableInfo={tableInfo}></HomePage>} />
+        <Route path="/" element={<HomePage tableInfo={tableInfo} previousTableInfo={previousTableInfo}></HomePage>} />
         <Route path="/news" element={<NewsPage></NewsPage>} />
         <Route
           path="/dashboard"
