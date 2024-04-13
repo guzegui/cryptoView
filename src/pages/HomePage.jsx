@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import moment from "moment";
+import { useState } from "react";
 
 function HomePage({ tableInfo, previousTableInfo }) {
   const { data } = tableInfo;
@@ -31,6 +32,20 @@ function HomePage({ tableInfo, previousTableInfo }) {
       </span>
     );
   }
+
+  // State to manage trade form visibility and trade amount
+  const [tradeFormVisible, setTradeFormVisible] = useState(false);
+  const [tradeAmount, setTradeAmount] = useState("");
+
+  // Function to handle trade form submission
+  const handleTradeSubmit = (e) => {
+    e.preventDefault();
+    // Perform trade logic here
+    console.log("Trade amount:", tradeAmount);
+    // Reset trade amount and hide trade form
+    setTradeAmount("");
+    setTradeFormVisible(false);
+  };
 
   return (
     <div>
@@ -77,8 +92,22 @@ function HomePage({ tableInfo, previousTableInfo }) {
                   >
                     {parseFloat(tableInfo.changePercent24Hr).toFixed(2)}
                   </td>
-
-                  <td>EXTRA</td>
+                  <td>
+                    {/* Render trade button or trade form */}
+                    {tradeFormVisible ? (
+                      <form onSubmit={handleTradeSubmit}>
+                        <input
+                          type="number"
+                          value={tradeAmount}
+                          onChange={(e) => setTradeAmount(e.target.value)}
+                          placeholder="Trade amount"
+                        />
+                        <button type="submit">Trade</button>
+                      </form>
+                    ) : (
+                      <button onClick={() => setTradeFormVisible(true)}>Trade</button>
+                    )}
+                  </td>
                 </tr>
               );
             })}
@@ -110,29 +139,4 @@ HomePage.propTypes = {
   }).isRequired,
 };
 
-HomePage.defaultProps = {
-  tableInfo: {
-    id: 0,
-    rank: 1,
-    symbol: "",
-    name: "",
-    priceUsd: "",
-    volumeUsd24Hr: "",
-    marketCapUsd: "",
-    availableSupply: "",
-    totalSupply: "",
-    changePercent24Hr: "",
-    vwap24Hr: "",
-    explorer: "",
-    timestamp: 0,
-  },
-  previousTableInfo: {
-    id: 0,
-    priceUsd: "",
-  },
-};
-
-
 export default HomePage;
-
-

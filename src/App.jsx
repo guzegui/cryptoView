@@ -21,9 +21,10 @@ function App() {
   const [previousTableInfo, setPreviousTableInfo] = useState({});
   const [users, setUsers] = useState({});
   const [loggedInState, setLoggedInState] = useState("");
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
 
-
+  // Crypto data from API
   useEffect(() => {
     const fetchData = () => {
       axios
@@ -47,13 +48,15 @@ function App() {
     // Fetch data initially
     fetchData();
 
-    // Set interval id to 20000 second
-    const intervalId = setInterval(fetchData, 20000000);
+    // Set interval id to 1 second
+    const intervalId = setInterval(fetchData, 1000);
 
     // Clear interval on unmount
     return () => clearInterval(intervalId);
   }, []);
 
+
+  // Load users from jsonserver
   useEffect(() => {
     axios.get(jsonServer).then((response) => {
       const users = response.data;
@@ -61,12 +64,37 @@ function App() {
     });
   }, []);
 
+ 
+  /*
+  // Load logged-in user
+
+  const id = localStorage.getItem("loggedInUser").slice(7, 11);
+
+  useEffect(() => {
+    axios.get(`${jsonServer}/${id}`).then((response) => {
+      const user = response.data;
+      console.log(user);
+      setUser(user);
+    });
+  }, []);
+*/
+
+/*
+when user is created and logged in in signup, it navigates to HOME page and the user is loaded
+it's available in the dashboard
+when the user goes back to home page, the user disappears
+MAYBE, user needs to be handled in app.jsx
+
+
+
+*/
+
+
+
   const handleLogin = (formData) => {
     localStorage.setItem("loggedInUser", JSON.stringify(formData));
-    setLoggedInState(formData);
+    setUser(formData);
     localStorage.getItem("loggedInUser");
-    console.log(localStorage.getItem("loggedInUser"));
-    console.log(`${jsonServer}/${loggedInState.id}`);
     navigate(`/`);
   };
 
@@ -84,11 +112,17 @@ function App() {
             <HomePage
               tableInfo={tableInfo}
               previousTableInfo={previousTableInfo}
+              user={user}
             ></HomePage>
           }
         />
         <Route path="/news" element={<NewsPage></NewsPage>} />
-        <Route path="/dashboard" element={<DashboardPage tableInfo={tableInfo}></DashboardPage>} />
+        <Route
+          path="/dashboard"
+          element={
+            <DashboardPage user={user} setUser={setUser}></DashboardPage>
+          }
+        />
         <Route
           path="/signup"
           element={

@@ -4,8 +4,7 @@ import axios from "axios";
 
 const jsonServer = "http://localhost:3000/users";
 
-function DashboardPage({ tableInfo }) {
-  const [user, setUser] = useState({});
+function DashboardPage({user, setUser}) {
   const id = localStorage.getItem("loggedInUser").slice(7, 11);
 
   useEffect(() => {
@@ -18,15 +17,15 @@ function DashboardPage({ tableInfo }) {
 
   return (
     <div>
-      DashboardPage
       {!user ? (
         <div>Loading...</div>
       ) : (
         <div>
-          {user.id}
-          {user.username}
-          {user.email}
-          {user.password}
+          <p>Id: {user.id}</p>
+          <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
+          <p>Password: {user.password}</p>
+          <p>Balance: ${user.balance?.dollars || "Loading..."}</p>
         </div>
       )}
     </div>
