@@ -89,36 +89,49 @@ function HomePage({ tableInfo, previousTableInfo }) {
 }
 
 HomePage.propTypes = {
-  tableInfo: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      rank: PropTypes.number.isRequired,
-      symbol: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      priceUsd: PropTypes.string.isRequired,
-      volumeUsd24Hr: PropTypes.string.isRequired,
-      marketCapUsd: PropTypes.string.isRequired,
-      availableSupply: PropTypes.string.isRequired,
-      totalSupply: PropTypes.string.isRequired,
-      changePercent24Hr: PropTypes.string.isRequired,
-      vwap24Hr: PropTypes.string.isRequired,
-      explorer: PropTypes.string.isRequired,
-      timestamp: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  previousTableInfo: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      priceUsd: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+  tableInfo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    rank: PropTypes.number.isRequired,
+    symbol: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    priceUsd: PropTypes.string.isRequired,
+    volumeUsd24Hr: PropTypes.string.isRequired,
+    marketCapUsd: PropTypes.string.isRequired,
+    availableSupply: PropTypes.string.isRequired,
+    totalSupply: PropTypes.string.isRequired,
+    changePercent24Hr: PropTypes.string.isRequired,
+    vwap24Hr: PropTypes.string.isRequired,
+    explorer: PropTypes.string.isRequired,
+    timestamp: PropTypes.number.isRequired,
+  }).isRequired,
+  previousTableInfo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    priceUsd: PropTypes.string.isRequired,
+  }).isRequired,
 };
-
 
 HomePage.defaultProps = {
-  tableInfo: [],
-  previousTableInfo: [],
+  tableInfo: {
+    id: 0,
+    rank: 1,
+    symbol: "",
+    name: "",
+    priceUsd: "",
+    volumeUsd24Hr: "",
+    marketCapUsd: "",
+    availableSupply: "",
+    totalSupply: "",
+    changePercent24Hr: "",
+    vwap24Hr: "",
+    explorer: "",
+    timestamp: 0,
+  },
+  previousTableInfo: {
+    id: 0,
+    priceUsd: "",
+  },
 };
+
 
 export default HomePage;
 

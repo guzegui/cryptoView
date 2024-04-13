@@ -1,4 +1,5 @@
-function Navbar({ loggedInState }) {
+function Navbar({ loggedInState, handleLogOut}) {
+
   return (
     <nav className="navbar navbar-dark bg-primary mb-3">
       <div className="container">
@@ -18,7 +19,7 @@ function Navbar({ loggedInState }) {
           <a className="navbar-brand" href="/dashboard">
             Dashboard
           </a>
-          <a className="navbar-brand" href="/">
+          <a className="navbar-brand" href="/" onClick={handleLogOut}>
             Log Out
           </a>
           </div>

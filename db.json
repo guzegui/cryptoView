@@ -476,6 +476,24 @@
       "balance": {
         "dollars": 100
       }
+    },
+    {
+      "id": "32f5",
+      "username": "asdasd",
+      "email": "asdas",
+      "password": "asdasd",
+      "balance": {
+        "dollars": 100
+      }
+    },
+    {
+      "id": "4e0d",
+      "username": "ASDFASDF",
+      "email": "ASDFASD",
+      "password": "ASDFASDF",
+      "balance": {
+        "dollars": 100
+      }
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
@@ -17,10 +17,12 @@ npx json-server --watch db.json --port 3000
 */
 
 function App() {
-  const [tableInfo, setTableInfo] = useState([]);
-  const [previousTableInfo, setPreviousTableInfo] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [tableInfo, setTableInfo] = useState({});
+  const [previousTableInfo, setPreviousTableInfo] = useState({});
+  const [users, setUsers] = useState({});
   const [loggedInState, setLoggedInState] = useState("");
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchData = () => {
@@ -60,22 +62,33 @@ function App() {
   }, []);
 
   const handleLogin = (formData) => {
+    localStorage.setItem("loggedInUser", JSON.stringify(formData));
     setLoggedInState(formData);
-    localStorage.getItem('loggedInUser');
-    console.log(localStorage.getItem('loggedInUser'))
+    localStorage.getItem("loggedInUser");
+    console.log(localStorage.getItem("loggedInUser"));
     console.log(`${jsonServer}/${loggedInState.id}`);
+    navigate(`/`);
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("loggedInUser");
   };
 
   return (
     <div>
-      <Navbar loggedInState={loggedInState} />
+      <Navbar loggedInState={loggedInState} handleLogOut={handleLogOut} />
       <Routes>
-        <Route path="/" element={<HomePage tableInfo={tableInfo} previousTableInfo={previousTableInfo}></HomePage>} />
-        <Route path="/news" element={<NewsPage></NewsPage>} />
         <Route
-          path="/dashboard"
-          element={<DashboardPage></DashboardPage>}
+          path="/"
+          element={
+            <HomePage
+              tableInfo={tableInfo}
+              previousTableInfo={previousTableInfo}
+            ></HomePage>
+          }
         />
+        <Route path="/news" element={<NewsPage></NewsPage>} />
+        <Route path="/dashboard" element={<DashboardPage></DashboardPage>} />
         <Route
           path="/signup"
           element={

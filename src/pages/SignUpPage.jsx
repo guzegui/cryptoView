@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const jsonServer = "http://localhost:3000/users";
 
@@ -19,7 +18,6 @@ function SignUpPage({ loggedInState, handleLogin }) {
     },
   });
 
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e) => {
@@ -42,9 +40,7 @@ function SignUpPage({ loggedInState, handleLogin }) {
       .post(`${jsonServer}`, formData)
       .then((response) => {
         console.log(response);
-        localStorage.setItem('loggedInUser', JSON.stringify(formData));
         handleLogin(response.data);
-        navigate(`/`);
       })
       .catch((error) => {
         console.log(error);
