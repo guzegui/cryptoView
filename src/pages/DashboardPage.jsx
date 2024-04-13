@@ -4,7 +4,7 @@ import axios from "axios";
 
 const jsonServer = "http://localhost:3000/users";
 
-function DashboardPage({user, setUser}) {
+function DashboardPage({ user, setUser, addCommasToThousands }) {
   const id = localStorage.getItem("loggedInUser").slice(7, 11);
 
   useEffect(() => {
@@ -25,7 +25,27 @@ function DashboardPage({user, setUser}) {
           <p>Username: {user.username}</p>
           <p>Email: {user.email}</p>
           <p>Password: {user.password}</p>
-          <p>Balance: ${user.balance?.dollars || "Loading..."}</p>
+          <p>
+            Currencies:
+            {user.balance &&
+            Object.entries(user.balance).every(
+              ([key, value]) => typeof value !== "undefined"
+            )
+              ? Object.entries(user.balance).map(([key, value]) => {
+                  if (key === "dollars") {
+                    return (
+                      <p key={key}>${addCommasToThousands(value)}</p>
+                    );
+                  } else {
+                    return (
+                      
+                      <p key={key}>{key}: {value}</p>
+                     
+                    );
+                  }
+                })
+              : "Loading..."}
+          </p>
         </div>
       )}
     </div>

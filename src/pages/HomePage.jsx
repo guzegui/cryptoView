@@ -2,13 +2,12 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import { useState } from "react";
 
-function HomePage({ tableInfo, previousTableInfo }) {
+function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   const { data } = tableInfo;
   const { timestamp } = tableInfo;
   const localTime = moment
     .unix(timestamp / 1000)
     .format("MMMM Do YYYY, h:mm:ss a");
-    
 
   // Sample user data for testing
   const testUser = {
@@ -24,13 +23,10 @@ function HomePage({ tableInfo, previousTableInfo }) {
   function formatPrice(price) {
     // Separate integer and decimal parts
     const [integerPart, decimalPart] = price.split(".");
+    console.log(`integerpart is of type ${ typeof integerPart}`);
 
-    // Regex - regular expressions
-    // Add commas for thousands: matches positions between groups of three consecutive digits (every thousand) and inserts a comma
-    const formattedIntegerPart = integerPart.replace(
-      /\B(?=(\d{3})+(?!\d))/g,
-      ","
-    );
+    const formattedIntegerPart = addCommasToThousands(integerPart);
+
     // Separate first two decimals from the rest
     const firstTwoDecimals = decimalPart.slice(0, 2);
     const restDecimals = decimalPart.slice(2);
@@ -138,8 +134,7 @@ function HomePage({ tableInfo, previousTableInfo }) {
                         <div>
                           {coin.name} Amount:{" "}
                           {(
-                            testUser.balance[selectedCurrency] /
-                            coin.priceUsd
+                            testUser.balance[selectedCurrency] / coin.priceUsd
                           ).toFixed(8)}
                         </div>
 

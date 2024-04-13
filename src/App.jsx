@@ -55,7 +55,6 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
-
   // Load users from jsonserver
   useEffect(() => {
     axios.get(jsonServer).then((response) => {
@@ -64,7 +63,6 @@ function App() {
     });
   }, []);
 
- 
   /*
   // Load logged-in user
 
@@ -79,7 +77,7 @@ function App() {
   }, []);
 */
 
-/*
+  /*
 when user is created and logged in in signup, it navigates to HOME page and the user is loaded
 it's available in the dashboard
 when the user goes back to home page, the user disappears
@@ -88,8 +86,6 @@ MAYBE, user needs to be handled in app.jsx
 
 
 */
-
-
 
   const handleLogin = (formData) => {
     localStorage.setItem("loggedInUser", JSON.stringify(formData));
@@ -102,6 +98,16 @@ MAYBE, user needs to be handled in app.jsx
     localStorage.removeItem("loggedInUser");
   };
 
+  function addCommasToThousands(integerPart) {
+    // Convert to string if it's a number
+    if (typeof integerPart === "number") {
+      integerPart = integerPart.toString();
+    }
+
+    // Regex to add commas for thousands
+    return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <div>
       <Navbar loggedInState={loggedInState} handleLogOut={handleLogOut} />
@@ -112,6 +118,7 @@ MAYBE, user needs to be handled in app.jsx
             <HomePage
               tableInfo={tableInfo}
               previousTableInfo={previousTableInfo}
+              addCommasToThousands={addCommasToThousands}
               user={user}
             ></HomePage>
           }
@@ -120,7 +127,11 @@ MAYBE, user needs to be handled in app.jsx
         <Route
           path="/dashboard"
           element={
-            <DashboardPage user={user} setUser={setUser}></DashboardPage>
+            <DashboardPage
+              user={user}
+              setUser={setUser}
+              addCommasToThousands={addCommasToThousands}
+            ></DashboardPage>
           }
         />
         <Route

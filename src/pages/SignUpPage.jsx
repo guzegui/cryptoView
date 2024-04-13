@@ -15,7 +15,7 @@ function SignUpPage({ loggedInState, handleLogin }) {
     email: "",
     password: "",
     balance: {
-      dollars: 100,
+      dollars: 100000000,
     },
   });
 
