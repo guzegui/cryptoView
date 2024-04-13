@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
 import moment from "moment";
 
 function HomePage({ tableInfo, previousTableInfo }) {
@@ -11,7 +11,9 @@ function HomePage({ tableInfo, previousTableInfo }) {
   function formatPrice(price) {
     // Separate integer and decimal parts
     const [integerPart, decimalPart] = price.split(".");
-    // Add commas for thousands
+    
+    // Regex - regular expressions
+    // Add commas for thousands: matches positions between groups of three consecutive digits (every thousand) and inserts a comma
     const formattedIntegerPart = integerPart.replace(
       /\B(?=(\d{3})+(?!\d))/g,
       ","
@@ -19,7 +21,8 @@ function HomePage({ tableInfo, previousTableInfo }) {
     // Separate first two decimals from the rest
     const firstTwoDecimals = decimalPart.slice(0, 2);
     const restDecimals = decimalPart.slice(2);
-    // Return formatted price parts as React elements
+
+    // Return formatted price parts as React elements, with reference to custom CSS classes in index.css
     return (
       <span>
         <span className="integer">{formattedIntegerPart}</span>.
@@ -50,7 +53,7 @@ function HomePage({ tableInfo, previousTableInfo }) {
         </thead>
         <tbody>
           {data &&
-            data.map((tableInfo, index) => {
+            data.map((tableInfo) => {
               return (
                 <tr key={tableInfo.id}>
                   <td>{tableInfo.rank}</td>
@@ -85,4 +88,51 @@ function HomePage({ tableInfo, previousTableInfo }) {
   );
 }
 
+HomePage.propTypes = {
+  tableInfo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    rank: PropTypes.number.isRequired,
+    symbol: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    priceUsd: PropTypes.string.isRequired,
+    volumeUsd24Hr: PropTypes.string.isRequired,
+    marketCapUsd: PropTypes.string.isRequired,
+    availableSupply: PropTypes.string.isRequired,
+    totalSupply: PropTypes.string.isRequired,
+    changePercent24Hr: PropTypes.string.isRequired,
+    vwap24Hr: PropTypes.string.isRequired,
+    explorer: PropTypes.string.isRequired,
+    timestamp: PropTypes.number.isRequired,
+    data: PropTypes.array.isRequired,
+  }),
+  previousTableInfo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    priceUsd: PropTypes.string.isRequired,
+  }),
+};
+
+HomePage.defaultProps = {
+  tableInfo: {
+    id: 0,
+    rank: 1,
+    symbol: "",
+    name: "",
+    priceUsd: "",
+    volumeUsd24Hr: "",
+    marketCapUsd: "",
+    availableSupply: "",
+    totalSupply: "",
+    changePercent24Hr: "",
+    vwap24Hr: "",
+    explorer: "",
+    timestamp: 0,
+  },
+  previousTableInfo: {
+    id: 0,
+    priceUsd: "",
+  },
+};
+
 export default HomePage;
+
+

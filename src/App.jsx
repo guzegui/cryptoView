@@ -48,7 +48,7 @@ function App() {
     // Set interval id to 1 second
     const intervalId = setInterval(fetchData, 1000);
 
-    // Clear interval on component unmount
+    // Clear interval on unmount
     return () => clearInterval(intervalId);
   }, []);
 
