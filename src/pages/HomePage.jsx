@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import moment from "moment";
 import { useState } from "react";
 
@@ -8,11 +8,23 @@ function HomePage({ tableInfo, previousTableInfo }) {
   const localTime = moment
     .unix(timestamp / 1000)
     .format("MMMM Do YYYY, h:mm:ss a");
+    
+
+  // Sample user data for testing
+  const testUser = {
+    id: "b450",
+    username: "asdfasd",
+    email: "asdfasdf",
+    password: "asdfasdf",
+    balance: {
+      dollars: 100,
+    },
+  };
 
   function formatPrice(price) {
     // Separate integer and decimal parts
     const [integerPart, decimalPart] = price.split(".");
-    
+
     // Regex - regular expressions
     // Add commas for thousands: matches positions between groups of three consecutive digits (every thousand) and inserts a comma
     const formattedIntegerPart = integerPart.replace(
@@ -33,13 +45,21 @@ function HomePage({ tableInfo, previousTableInfo }) {
     );
   }
 
-  // State to manage trade form visibility and trade amount
+  // State to manage trade form visibility, trade amount, and selected currency
   const [tradeFormVisible, setTradeFormVisible] = useState(false);
   const [tradeAmount, setTradeAmount] = useState("");
+  const [selectedCurrency, setSelectedCurrency] = useState(
+    Object.keys(testUser.balance)[0]
+  ); // Initialize with the first currency
 
   // Function to handle trade form submission
   const handleTradeSubmit = (e) => {
     e.preventDefault();
+    // Check if the trade amount is greater than the available balance
+    if (parseFloat(tradeAmount) > testUser.balance[selectedCurrency]) {
+      alert("You don't have enough balance!");
+      return;
+    }
     // Perform trade logic here
     console.log("Trade amount:", tradeAmount);
     // Reset trade amount and hide trade form
@@ -68,34 +88,62 @@ function HomePage({ tableInfo, previousTableInfo }) {
         </thead>
         <tbody>
           {data &&
-            data.map((tableInfo) => {
+            data.map((coin) => {
               return (
-                <tr key={tableInfo.id}>
-                  <td>{tableInfo.rank}</td>
+                <tr key={coin.id}>
+                  <td>{coin.rank}</td>
                   <td style={{ textDecoration: "none", color: "inherit" }}>
                     <a
-                      href={tableInfo.explorer}
+                      href={coin.explorer}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {tableInfo.symbol}
+                      {coin.symbol}
                     </a>
                   </td>
-                  <td className="price">{formatPrice(tableInfo.priceUsd)}</td>
-                  <td>{parseFloat(tableInfo.volumeUsd24Hr).toFixed(2)}</td>
+                  <td className="price">{formatPrice(coin.priceUsd)}</td>
+                  <td>{parseFloat(coin.volumeUsd24Hr).toFixed(2)}</td>
                   <td
                     className={
-                      tableInfo.changePercent24Hr < 0
+                      coin.changePercent24Hr < 0
                         ? "text-danger"
                         : "text-success"
                     }
                   >
-                    {parseFloat(tableInfo.changePercent24Hr).toFixed(2)}
+                    {parseFloat(coin.changePercent24Hr).toFixed(2)}
                   </td>
                   <td>
                     {/* Render trade button or trade form */}
                     {tradeFormVisible ? (
                       <form onSubmit={handleTradeSubmit}>
+                        {/* Dropdown menu for selecting available currencies */}
+                        <select
+                          value={selectedCurrency}
+                          onChange={(e) => setSelectedCurrency(e.target.value)}
+                        >
+                          {Object.keys(testUser.balance).map((currency) => (
+                            <option key={currency} value={currency}>
+                              {currency}
+                            </option>
+                          ))}
+                        </select>
+
+                        {/* Display the available balance */}
+                        <div>
+                          Available Balance:{" "}
+                          {testUser.balance[selectedCurrency]}
+                        </div>
+
+                        {/* Calculate the amount of Bitcoin that the available balance would buy */}
+                        <div>
+                          {coin.name} Amount:{" "}
+                          {(
+                            testUser.balance[selectedCurrency] /
+                            coin.priceUsd
+                          ).toFixed(8)}
+                        </div>
+
+                        {/* Input field for the trade amount */}
                         <input
                           type="number"
                           value={tradeAmount}
@@ -105,7 +153,9 @@ function HomePage({ tableInfo, previousTableInfo }) {
                         <button type="submit">Trade</button>
                       </form>
                     ) : (
-                      <button onClick={() => setTradeFormVisible(true)}>Trade</button>
+                      <button onClick={() => setTradeFormVisible(true)}>
+                        Trade
+                      </button>
                     )}
                   </td>
                 </tr>
