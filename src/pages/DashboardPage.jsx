@@ -4,15 +4,14 @@ import axios from "axios";
 
 
 
-function DashboardPage({loggedIn}) {
+function DashboardPage() {
  
     useEffect(() => {
-        console.log(loggedIn); // Check loggedIn inside useEffect with loggedIn as dependency
-      }, [loggedIn]);
+      }, []);
 
   return (
     <div>DashboardPage
-    {console.log(loggedIn)}</div>
+    {localStorage.getItem('loggedInUser')}</div>
   )
 }
 

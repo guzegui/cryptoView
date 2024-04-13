@@ -20,7 +20,7 @@ function App() {
   const [tableInfo, setTableInfo] = useState([]);
   const [previousTableInfo, setPreviousTableInfo] = useState([]);
   const [users, setUsers] = useState([]);
-  const [loggedIn, setLoggedIn] = useState("");
+  const [loggedInState, setLoggedInState] = useState("");
 
   useEffect(() => {
     const fetchData = () => {
@@ -45,8 +45,8 @@ function App() {
     // Fetch data initially
     fetchData();
 
-    // Set interval id to 1 second
-    const intervalId = setInterval(fetchData, 1000);
+    // Set interval id to 20000 second
+    const intervalId = setInterval(fetchData, 20000000);
 
     // Clear interval on unmount
     return () => clearInterval(intervalId);
@@ -60,26 +60,27 @@ function App() {
   }, []);
 
   const handleLogin = (formData) => {
-    setLoggedIn(formData);
+    setLoggedInState(formData);
+    localStorage.getItem('loggedInUser');
+    console.log(localStorage.getItem('loggedInUser'))
+    console.log(`${jsonServer}/${loggedInState.id}`);
   };
 
-  console.log(`${jsonServer}/${loggedIn.id}`);
-  console.log(loggedIn);
   return (
     <div>
-      <Navbar loggedIn={loggedIn} />
+      <Navbar loggedInState={loggedInState} />
       <Routes>
         <Route path="/" element={<HomePage tableInfo={tableInfo} previousTableInfo={previousTableInfo}></HomePage>} />
         <Route path="/news" element={<NewsPage></NewsPage>} />
         <Route
           path="/dashboard"
-          element={<DashboardPage loggedIn={loggedIn}></DashboardPage>}
+          element={<DashboardPage></DashboardPage>}
         />
         <Route
           path="/signup"
           element={
             <SignUpPage
-              loggedIn={loggedIn}
+              loggedInState={loggedInState}
               handleLogin={handleLogin}
             ></SignUpPage>
           }

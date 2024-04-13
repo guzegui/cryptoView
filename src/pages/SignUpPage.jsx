@@ -5,17 +5,21 @@ import { useNavigate } from "react-router-dom";
 
 const jsonServer = "http://localhost:3000/users";
 
-function SignUpPage({ loggedIn, handleLogin }) {
-    const [formData, setFormData] = useState({
-        username: "",
-        email: "",
-        password: "",
-        balance: {
-            dollars: 100,
-        },
-    });
-    
-    const navigate = useNavigate();
+/*
+npx json-server --watch db.json --port 3000
+*/
+
+function SignUpPage({ loggedInState, handleLogin }) {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    balance: {
+      dollars: 100,
+    },
+  });
+
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e) => {
@@ -32,27 +36,24 @@ function SignUpPage({ loggedIn, handleLogin }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    const newUser = formData;
-
     console.log(formData);
 
     axios
-      .post(`${jsonServer}`, newUser)
+      .post(`${jsonServer}`, formData)
       .then((response) => {
         console.log(response);
+        localStorage.setItem('loggedInUser', JSON.stringify(formData));
         handleLogin(response.data);
-        navigate(`/`)
+        navigate(`/`);
       })
       .catch((error) => {
         console.log(error);
       });
-
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
+      <div className="form-group">
         <label htmlFor="email">Email:</label>
         <input
           type="text"
@@ -60,9 +61,10 @@ function SignUpPage({ loggedIn, handleLogin }) {
           name="email"
           value={formData.email}
           onChange={handleInputChange}
+          placeholder="example@example.com"
         />
       </div>
-      <div>
+      <div className="form-group">
         <label htmlFor="username">Username:</label>
         <input
           type="text"
@@ -72,7 +74,7 @@ function SignUpPage({ loggedIn, handleLogin }) {
           onChange={handleInputChange}
         />
       </div>
-      <div>
+      <div className="form-group">
         <label htmlFor="password">Password:</label>
         <input
           type={showPassword ? "text" : "password"}
@@ -91,3 +93,35 @@ function SignUpPage({ loggedIn, handleLogin }) {
 }
 
 export default SignUpPage;
+
+/*
+
+
+
+*/
+
+
+/*
+<form>
+      <div className="form-group">
+        <label htmlFor="exampleInputEmail1">Email address</label>
+        <input type="email" className="form-control" id="exampleInputEmail1" placeholder="Email" />
+      </div>
+      <div className="form-group">
+        <label htmlFor="exampleInputPassword1">Password</label>
+        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
+      </div>
+      <div className="form-group">
+        <label htmlFor="exampleInputFile">File input</label>
+        <input type="file" id="exampleInputFile" />
+        <p className="help-block">Example block-level help text here.</p>
+      </div>
+      <div className="checkbox">
+        <label>
+          <input type="checkbox" /> Check me out
+        </label>
+      </div>
+      <button type="submit" className="btn btn-default">Submit</button>
+    </form>
+
+*/
