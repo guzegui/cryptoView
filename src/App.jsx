@@ -88,7 +88,7 @@ function App() {
           }
         />
         <Route path="/news" element={<NewsPage></NewsPage>} />
-        <Route path="/dashboard" element={<DashboardPage></DashboardPage>} />
+        <Route path="/dashboard" element={<DashboardPage tableInfo={tableInfo}></DashboardPage>} />
         <Route
           path="/signup"
           element={
