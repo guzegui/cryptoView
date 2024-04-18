@@ -145,6 +145,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                           onChange={(e) => setSelectedCurrency(e.target.value)}
                         >
                           {Object.keys(testUser.balance).map((currency) => (
+                            currency !== coin.id &&
                             <option key={currency} value={currency}>
                               {currency}
                             </option>
