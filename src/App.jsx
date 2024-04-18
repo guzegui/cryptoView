@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage";
 import NewsPage from "./pages/NewsPage";
 import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const testApi = "https://api.coincap.io/v2/assets";
 

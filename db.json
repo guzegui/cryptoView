@@ -18,6 +18,15 @@
         "dollars": 100000000,
         "bitcoin": 1
       }
+    },
+    {
+      "id": "d59b",
+      "username": "asdas",
+      "email": "asdasd@sada",
+      "password": "sdadsa",
+      "balance": {
+        "dollars": 100000000
+      }
     }
   ]
 }

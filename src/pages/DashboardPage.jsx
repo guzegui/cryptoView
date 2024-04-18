@@ -6,6 +6,7 @@ const jsonServer = "http://localhost:3000/users";
 
 function DashboardPage({ user, setUser, addCommasToThousands }) {
   const id = localStorage.getItem("loggedInUser").slice(7, 11);
+  
 
   useEffect(() => {
     axios.get(`${jsonServer}/${id}`).then((response) => {
