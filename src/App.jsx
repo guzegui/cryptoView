@@ -38,6 +38,7 @@ function App() {
             priceUsd: element.priceUsd,
           }));
           setPreviousTableInfo(prevPrices);
+          console.log(data);
           setTableInfo(data);
         })
         .catch((error) => {

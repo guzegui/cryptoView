@@ -41,8 +41,17 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     );
   }
 
+  function tradeButtonClick(coinId){
+    setTradeFormVisible({ "isTrading": true, "id": coinId });
+    console.log(coinId);
+  }
+
+  function isTrading(coinId){
+    return (tradeFormVisible.id === coinId && tradeFormVisible.isTrading)
+  }
+
   // State to manage trade form visibility, trade amount, and selected currency
-  const [tradeFormVisible, setTradeFormVisible] = useState(false);
+  const [tradeFormVisible, setTradeFormVisible] = useState({"isTrading": false, "id": ""});
   const [tradeAmount, setTradeAmount] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useState(
     Object.keys(testUser.balance)[0]
@@ -60,7 +69,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     console.log("Trade amount:", tradeAmount);
     // Reset trade amount and hide trade form
     setTradeAmount("");
-    setTradeFormVisible(false);
+    setTradeFormVisible(({"isTrading": false, "id": ""}));
   };
 
   return (
@@ -110,7 +119,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                   </td>
                   <td>
                     {/* Render trade button or trade form */}
-                    {tradeFormVisible ? (
+                    {isTrading(coin.id) ? (
                       <form onSubmit={handleTradeSubmit}>
                         {/* Dropdown menu for selecting available currencies */}
                         <select
@@ -148,7 +157,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                         <button type="submit">Trade</button>
                       </form>
                     ) : (
-                      <button onClick={() => setTradeFormVisible(true)}>
+                      <button onClick={() => tradeButtonClick(coin.id)}>
                         Trade
                       </button>
                     )}
