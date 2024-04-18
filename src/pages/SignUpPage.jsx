@@ -16,6 +16,10 @@ function SignUpPage({ loggedInState, handleLogin }) {
     password: "",
     balance: {
       dollars: 100000000,
+      bitcoin: 10,
+      ethereum: 10,
+      litecoin: 10,
+      dogecoin: 10,
     },
   });
 
@@ -36,12 +40,10 @@ function SignUpPage({ loggedInState, handleLogin }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
 
     axios
       .post(`${jsonServer}`, formData)
       .then((response) => {
-        console.log(response);
         handleLogin(response.data);
         navigate(`/`);
       })

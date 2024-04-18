@@ -9,21 +9,27 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     .unix(timestamp / 1000)
     .format("MMMM Do YYYY, h:mm:ss a");
 
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
   // Sample user data for testing
-  const testUser = {
-    id: "b450",
-    username: "asdfasd",
-    email: "asdfasdf",
-    password: "asdfasdf",
-    balance: {
-      dollars: 100,
-    },
-  };
+  const testUser = loggedInUser
+    ? loggedInUser
+    : {
+        id: "b450",
+        username: "asdfasd",
+        email: "asdfasdf",
+        password: "asdfasdf",
+        balance: {
+          dollars: 100,
+        },
+      };
+
+  console.log(`the user currently logged in is ${JSON.stringify(testUser)}`);
+  console.log(localStorage.getItem("loggedInUser"));
 
   function formatPrice(price) {
     // Separate integer and decimal parts
     const [integerPart, decimalPart] = price.split(".");
-    console.log(`integerpart is of type ${ typeof integerPart}`);
 
     const formattedIntegerPart = addCommasToThousands(integerPart);
 
@@ -41,17 +47,28 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     );
   }
 
-  function tradeButtonClick(coinId){
-    setTradeFormVisible({ "isTrading": true, "id": coinId });
-    console.log(coinId);
+  function tradeButtonClick(coinId) {
+    setTradeFormVisible({ isTrading: true, id: coinId });
   }
 
-  function isTrading(coinId){
-    return (tradeFormVisible.id === coinId && tradeFormVisible.isTrading)
+  function isTrading(coinId) {
+    return tradeFormVisible.id === coinId && tradeFormVisible.isTrading;
+  }
+
+  function calculateAmount(selectedCurrency, coin) {
+    if (selectedCurrency === "dollars") {
+      return (testUser.balance[selectedCurrency] / coin.priceUsd).toFixed(8);
+    } else {
+      const currency = data.find((element) => element.id === selectedCurrency);
+      return (currency.priceUsd * tradeAmount / coin.priceUsd).toFixed(8);
+    }
   }
 
   // State to manage trade form visibility, trade amount, and selected currency
-  const [tradeFormVisible, setTradeFormVisible] = useState({"isTrading": false, "id": ""});
+  const [tradeFormVisible, setTradeFormVisible] = useState({
+    isTrading: false,
+    id: "",
+  });
   const [tradeAmount, setTradeAmount] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useState(
     Object.keys(testUser.balance)[0]
@@ -66,10 +83,9 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
       return;
     }
     // Perform trade logic here
-    console.log("Trade amount:", tradeAmount);
     // Reset trade amount and hide trade form
     setTradeAmount("");
-    setTradeFormVisible(({"isTrading": false, "id": ""}));
+    setTradeFormVisible({ isTrading: false, id: "" });
   };
 
   return (
@@ -139,12 +155,14 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                           {testUser.balance[selectedCurrency]}
                         </div>
 
-                        {/* Calculate the amount of Bitcoin that the available balance would buy */}
+                        {/* Calculate the amount that the available balance would buy */}
                         <div>
                           {coin.name} Amount:{" "}
-                          {(
-                            testUser.balance[selectedCurrency] / coin.priceUsd
-                          ).toFixed(8)}
+                          {console.log(
+                            "the selected currency is " + selectedCurrency
+                          )}
+                          {console.log(typeof selectedCurrency)}
+                          {calculateAmount(selectedCurrency, coin, tradeAmount)}
                         </div>
 
                         {/* Input field for the trade amount */}

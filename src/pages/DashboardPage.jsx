@@ -10,7 +10,6 @@ function DashboardPage({ user, setUser, addCommasToThousands }) {
   useEffect(() => {
     axios.get(`${jsonServer}/${id}`).then((response) => {
       const user = response.data;
-      console.log(user);
       setUser(user);
     });
   }, []);

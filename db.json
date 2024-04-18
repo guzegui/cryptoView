@@ -18,6 +18,28 @@
         "dollars": 100000000,
         "bitcoin": 1
       }
+    },
+    {
+      "id": "f6eb",
+      "username": "d",
+      "email": "d",
+      "password": "d",
+      "balance": {
+        "dollars": 100000000
+      }
+    },
+    {
+      "id": "0c15",
+      "username": "w",
+      "email": "w",
+      "password": "w",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 10,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
     }
   ]
 }

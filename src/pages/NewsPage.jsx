@@ -27,10 +27,8 @@ function NewsPage() {
           return newItem;
         });
 
-        console.log(newsItems);
 
         // Display the converted JSON data
-        console.log("Parsed RSS feed (as JSON):", JSON.stringify(newsItems, null, 2));
       })
       .catch((error) => {
         console.error("Error fetching RSS feed:", error);
