@@ -55,9 +55,11 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     return tradeFormVisible.id === coinId && tradeFormVisible.isTrading;
   }
 
-  function calculateAmount(selectedCurrency, coin) {
+  function calculateAmount(selectedCurrency, coin, tradeAmount) {
+    console.log(tradeAmount);
+    console.log(selectedCurrency);
     if (selectedCurrency === "dollars") {
-      return (testUser.balance[selectedCurrency] / coin.priceUsd).toFixed(8);
+      return (tradeAmount / coin.priceUsd).toFixed(8);
     } else {
       const currency = data.find((element) => element.id === selectedCurrency);
       return (currency.priceUsd * tradeAmount / coin.priceUsd).toFixed(8);
