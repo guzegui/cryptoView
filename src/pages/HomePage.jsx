@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
 import moment from "moment";
 import { useState } from "react";
+import axios from "axios";
+
+const jsonServer = "http://localhost:3000/users";
 
 function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   const { data } = tableInfo;
@@ -62,7 +65,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
       return (tradeAmount / coin.priceUsd).toFixed(8);
     } else {
       const currency = data.find((element) => element.id === selectedCurrency);
-      return (currency.priceUsd * tradeAmount / coin.priceUsd).toFixed(8);
+      return ((currency.priceUsd * tradeAmount) / coin.priceUsd).toFixed(8);
     }
   }
 
@@ -77,7 +80,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   ); // Initialize with the first currency
 
   // Function to handle trade form submission
-  const handleTradeSubmit = (e) => {
+  function handleTradeSubmit(e, coinId) {
     e.preventDefault();
     // Check if the trade amount is greater than the available balance
     if (parseFloat(tradeAmount) > testUser.balance[selectedCurrency]) {
@@ -85,10 +88,47 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
       return;
     }
     // Perform trade logic here
+    console.log(coinId);
+    console.log(
+      "new balance of " +
+        coinId +
+        " BOUGHT should be " +
+        testUser.balance[coinId] +
+        tradeAmount
+    );
+    console.log(
+      "new balance of " +
+        selectedCurrency +
+        " SOLD should be " +
+        testUser.balance[selectedCurrency] +
+        tradeAmount
+    );
+
+    console.log(`${jsonServer}/${testUser.id}`);
+
+    axios
+      .put(`${jsonServer}/${testUser.id}`, {
+        ...testUser,
+        balance: {
+          ...testUser.balance,
+          [coinId]: testUser.balance[coinId] + tradeAmount,
+          [selectedCurrency]:
+            testUser.balance[selectedCurrency] - tradeAmount * selectedCurrency,
+        },
+      })
+      .then((response) => {
+        // Handle success response
+        console.log(response.data); // Log the response data
+      })
+      .catch((error) => {
+        // Handle error
+        console.log(error); // Log the error
+      });
+
     // Reset trade amount and hide trade form
     setTradeAmount("");
     setTradeFormVisible({ isTrading: false, id: "" });
-  };
+  }
 
   return (
     <div>
@@ -138,18 +178,26 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                   <td>
                     {/* Render trade button or trade form */}
                     {isTrading(coin.id) ? (
-                      <form onSubmit={handleTradeSubmit}>
+                      <form
+                        onSubmit={{
+                          function(e) {
+                            handleTradeSubmit(e, coin.id);
+                          },
+                        }}
+                      >
                         {/* Dropdown menu for selecting available currencies */}
                         <select
                           value={selectedCurrency}
                           onChange={(e) => setSelectedCurrency(e.target.value)}
                         >
-                          {Object.keys(testUser.balance).map((currency) => (
-                            currency !== coin.id &&
-                            <option key={currency} value={currency}>
-                              {currency}
-                            </option>
-                          ))}
+                          {Object.keys(testUser.balance).map(
+                            (currency) =>
+                              currency !== coin.id && (
+                                <option key={currency} value={currency}>
+                                  {currency}
+                                </option>
+                              )
+                          )}
                         </select>
 
                         {/* Display the available balance */}
