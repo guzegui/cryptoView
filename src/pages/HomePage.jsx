@@ -162,19 +162,22 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
 
     console.log(`${jsonServer}/${testUser.id}`);
 
+    const updatedUser = {
+      ...testUser,
+      balance: {
+        ...testUser.balance,
+        [coinId]: testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
+        [tradeData.fromCoin]:
+          testUser.balance[tradeData.fromCoin] -
+          tradeData.fromCoinAmount,
+      },
+    }
+
     axios
-      .put(`${jsonServer}/${testUser.id}`, {
-        ...testUser,
-        balance: {
-          ...testUser.balance,
-          [coinId]: testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
-          [tradeData.fromCoin]:
-            testUser.balance[tradeData.fromCoin] -
-            tradeData.fromCoinAmount,
-        },
-      })
+      .put(`${jsonServer}/${testUser.id}`, updatedUser)
       .then((response) => {
         // Handle success response
+        localStorage.setItem("loggedInUser", JSON.stringify(updatedUser))
         console.log(response.data); // Log the response data
       })
       .catch((error) => {

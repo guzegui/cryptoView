@@ -261,6 +261,19 @@
         "litecoin": 10,
         "dogecoin": 10
       }
+    },
+    {
+      "id": "be46",
+      "username": "w",
+      "email": "w",
+      "password": "w",
+      "balance": {
+        "dollars": 99990000,
+        "bitcoin": 10.15638441,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
     }
   ]
 }
