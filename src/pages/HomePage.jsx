@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import moment from "moment";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const jsonServer = "http://localhost:3000/users";
@@ -35,17 +35,28 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     fromCoin: Object.keys(testUser.balance)[0],
     toCoin: "",
     availableBalance: Object.values(testUser.balance)[0],
-    fromCoinAmount: 0, 
+    fromCoinAmount: 0,
     toCoinAmount: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setTradeData({
-      ...tradeData,
-      [name]: value,
-    });
+    if (name === "fromCoinAmount") {
+      const toCoin = data.find((element) => element.id === tradeFormVisible.id);
+      const toCoinAmount = calculateAmount(tradeData.fromCoin, toCoin, value); 
+      setTradeData({
+        ...tradeData,
+        fromCoinAmount: value,
+        toCoinAmount: toCoinAmount,
+        toCoin: toCoin.id,
+      });
+    } else {
+      setTradeData({
+        ...tradeData,
+        [name]: value,
+      });
+    }
 
     if (name === "tradeAmount") {
       if (
@@ -104,11 +115,9 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
       [name]: value,
     });
       */
-      conversion = (
-        (currency.priceUsd * tradeAmount) /
-        coin.priceUsd
-      ).toFixed(8);
-      
+      conversion = ((currency.priceUsd * tradeAmount) / coin.priceUsd).toFixed(
+        8
+      );
     }
     // setTradeData({
     //   ...tradeData,
@@ -182,6 +191,19 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     });
     setTradeFormVisible({ isTrading: false, id: "" });
   }
+
+  //   useEffect(() => {
+
+  //     setTradeData({
+  // ...tradeData,
+  // toCoinAmount: (calculateAmount(
+  //   tradeData.fromCoin,
+  //   tradeFormVisible.id,
+  //   tradeData.fromCoinAmount
+  // )),
+  // toCoin: tradeFormVisible.id,
+  // });
+  // }, [tableInfo, tradeFormVisible, tradeData]);
 
   return (
     <div>

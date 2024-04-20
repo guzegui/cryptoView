@@ -183,6 +183,32 @@
         "litecoin": 10,
         "dogecoin": 10
       }
+    },
+    {
+      "id": "51da",
+      "username": "2",
+      "email": "2",
+      "password": "2",
+      "balance": {
+        "dollars": null,
+        "bitcoin": null,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
+    },
+    {
+      "id": "61fd",
+      "username": "q",
+      "email": "q",
+      "password": "q",
+      "balance": {
+        "dollars": null,
+        "bitcoin": null,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
     }
   ]
 }
