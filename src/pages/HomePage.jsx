@@ -167,10 +167,10 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
         ...testUser,
         balance: {
           ...testUser.balance,
-          [coinId]: testUser.balance[coinId] + tradeData.tradeAmount,
+          [coinId]: testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
           [tradeData.fromCoin]:
             testUser.balance[tradeData.fromCoin] -
-            tradeData.tradeAmount * tradeData.fromCoin,
+            tradeData.fromCoinAmount,
         },
       })
       .then((response) => {
