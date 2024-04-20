@@ -11,7 +11,11 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   const localTime = moment
     .unix(timestamp / 1000)
     .format("MMMM Do YYYY, h:mm:ss a");
-
+  // State to manage trade form visibility, trade amount, and selected currency
+  const [tradeFormVisible, setTradeFormVisible] = useState({
+    isTrading: false,
+    id: "",
+  });
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
   // Sample user data for testing
@@ -27,8 +31,35 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
         },
       };
 
-  console.log(`the user currently logged in is ${JSON.stringify(testUser)}`);
-  console.log(localStorage.getItem("loggedInUser"));
+  const [tradeData, setTradeData] = useState({
+    fromCoin: Object.keys(testUser.balance)[0],
+    toCoin: "",
+    availableBalance: Object.values(testUser.balance)[0],
+    fromCoinAmount: 0, 
+    toCoinAmount: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setTradeData({
+      ...tradeData,
+      [name]: value,
+    });
+
+    if (name === "tradeAmount") {
+      if (
+        parseFloat(tradeData.tradeAmount) > testUser.balance[selectedCurrency]
+      ) {
+        alert("You don't have enough balance!");
+        setTradeData({
+          ...tradeData,
+          tradeAmount: testUser.balance[selectedCurrency],
+        });
+        return;
+      }
+    }
+  };
 
   function formatPrice(price) {
     // Separate integer and decimal parts
@@ -61,47 +92,63 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   function calculateAmount(selectedCurrency, coin, tradeAmount) {
     console.log(tradeAmount);
     console.log(selectedCurrency);
+    let conversion;
     if (selectedCurrency === "dollars") {
-      return (tradeAmount / coin.priceUsd).toFixed(8);
+      conversion = (tradeAmount / coin.priceUsd).toFixed(8);
     } else {
       const currency = data.find((element) => element.id === selectedCurrency);
-      return ((currency.priceUsd * tradeAmount) / coin.priceUsd).toFixed(8);
-    }
-  }
 
-  // State to manage trade form visibility, trade amount, and selected currency
-  const [tradeFormVisible, setTradeFormVisible] = useState({
-    isTrading: false,
-    id: "",
-  });
-  const [tradeAmount, setTradeAmount] = useState("");
-  const [selectedCurrency, setSelectedCurrency] = useState(
-    Object.keys(testUser.balance)[0]
-  ); // Initialize with the first currency
+      /*
+        setTradeData({
+      ...tradeData,
+      [name]: value,
+    });
+      */
+      conversion = (
+        (currency.priceUsd * tradeAmount) /
+        coin.priceUsd
+      ).toFixed(8);
+      
+    }
+    // setTradeData({
+    //   ...tradeData,
+    //   toCoinAmount: conversion,
+    //   toCoin: coin,
+    // });
+    return conversion;
+  }
 
   // Function to handle trade form submission
   function handleTradeSubmit(e, coinId) {
     e.preventDefault();
     // Check if the trade amount is greater than the available balance
-    if (parseFloat(tradeAmount) > testUser.balance[selectedCurrency]) {
+    if (
+      parseFloat(tradeData.tradeAmount) > testUser.balance[tradeData.fromCoin]
+    ) {
       alert("You don't have enough balance!");
       return;
     }
     // Perform trade logic here
     console.log(coinId);
     console.log(
-      "new balance of " +
+      "the trade is worth " +
+        tradeData.tradeAmount +
+        " which is of type " +
+        typeof tradeData.tradeAmount +
+        " new balance of " +
         coinId +
         " BOUGHT should be " +
         testUser.balance[coinId] +
-        tradeAmount
+        tradeData.tradeAmount +
+        " of type " +
+        typeof testUser.balance[coinId]
     );
     console.log(
       "new balance of " +
-        selectedCurrency +
+        tradeData.fromCoin +
         " SOLD should be " +
-        testUser.balance[selectedCurrency] +
-        tradeAmount
+        testUser.balance[tradeData.fromCoin] -
+        tradeData.tradeAmount
     );
 
     console.log(`${jsonServer}/${testUser.id}`);
@@ -111,9 +158,10 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
         ...testUser,
         balance: {
           ...testUser.balance,
-          [coinId]: testUser.balance[coinId] + tradeAmount,
-          [selectedCurrency]:
-            testUser.balance[selectedCurrency] - tradeAmount * selectedCurrency,
+          [coinId]: testUser.balance[coinId] + tradeData.tradeAmount,
+          [tradeData.fromCoin]:
+            testUser.balance[tradeData.fromCoin] -
+            tradeData.tradeAmount * tradeData.fromCoin,
         },
       })
       .then((response) => {
@@ -126,7 +174,12 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
       });
 
     // Reset trade amount and hide trade form
-    setTradeAmount("");
+    setTradeData({
+      fromCoin: Object.keys(testUser.balance)[0],
+      toCoin: "",
+      availableBalance: "",
+      tradeAmount: "",
+    });
     setTradeFormVisible({ isTrading: false, id: "" });
   }
 
@@ -187,14 +240,15 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                       >
                         {/* Dropdown menu for selecting available currencies */}
                         <select
-                          value={selectedCurrency}
-                          onChange={(e) => setSelectedCurrency(e.target.value)}
+                          name="fromCoin"
+                          value={tradeData.fromCoin}
+                          onChange={handleInputChange}
                         >
                           {Object.keys(testUser.balance).map(
-                            (currency) =>
-                              currency !== coin.id && (
-                                <option key={currency} value={currency}>
-                                  {currency}
+                            (coin) =>
+                              coin !== coin.id && (
+                                <option key={coin} value={coin}>
+                                  {coin}
                                 </option>
                               )
                           )}
@@ -202,28 +256,36 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
 
                         {/* Display the available balance */}
                         <div>
-                          Available Balance:{" "}
-                          {testUser.balance[selectedCurrency]}
+                          Available Balance:
+                          {addCommasToThousands(
+                            testUser.balance[tradeData.fromCoin]
+                          )}
                         </div>
 
                         {/* Calculate the amount that the available balance would buy */}
                         <div>
-                          {coin.name} Amount:{" "}
-                          {console.log(
-                            "the selected currency is " + selectedCurrency
+                          {coin.name} Amount:
+                          {calculateAmount(
+                            tradeData.fromCoin,
+                            coin,
+                            tradeData.fromCoinAmount
                           )}
-                          {console.log(typeof selectedCurrency)}
-                          {calculateAmount(selectedCurrency, coin, tradeAmount)}
                         </div>
 
                         {/* Input field for the trade amount */}
                         <input
                           type="number"
-                          value={tradeAmount}
-                          onChange={(e) => setTradeAmount(e.target.value)}
+                          name="fromCoinAmount"
+                          value={tradeData.fromCoinAmount}
+                          onChange={handleInputChange}
                           placeholder="Trade amount"
                         />
-                        <button type="submit">Trade</button>
+                        <button
+                          type="submit"
+                          onClick={(e) => handleTradeSubmit(e, coin.id)}
+                        >
+                          Trade
+                        </button>
                       </form>
                     ) : (
                       <button onClick={() => tradeButtonClick(coin.id)}>
