@@ -300,10 +300,10 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                           onChange={handleInputChange}
                         >
                           {Object.keys(testUser.balance).map(
-                            (coin) =>
-                              coin !== coin.id && (
-                                <option key={coin} value={coin}>
-                                  {coin}
+                            (currency) =>
+                              currency !== coin.id && (
+                                <option key={currency} value={currency}>
+                                  {currency}
                                 </option>
                               )
                           )}
@@ -312,9 +312,11 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                         {/* Display the available balance */}
                         <div>
                           Available Balance:
-                          {addCommasToThousands(
+                          {testUser.balance[tradeData.fromCoin] && addCommasToThousands(
                             testUser.balance[tradeData.fromCoin]
                           )}
+                          {console.log(typeof testUser.balance[tradeData.fromCoin])}
+
                         </div>
 
                         {/* Calculate the amount that the available balance would buy */}

@@ -24,7 +24,7 @@ function DashboardPage({ user, setUser, addCommasToThousands }) {
           <p>Username: {user.username}</p>
           <p>Email: {user.email}</p>
           <p>Password: {user.password}</p>
-          <p>
+          <div>
             Currencies:
             {user.balance &&
             Object.entries(user.balance).every(
@@ -44,7 +44,7 @@ function DashboardPage({ user, setUser, addCommasToThousands }) {
                   }
                 })
               : "Loading..."}
-          </p>
+          </div>
         </div>
       )}
     </div>
