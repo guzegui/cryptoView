@@ -249,117 +249,127 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   // toCoin: tradeFormVisible.id,
   // });
   // }, [tableInfo, tradeFormVisible, tradeData]);
-
+console.log(localTime);
   return (
     <div>
-      <p>
-        Last updated on {localTime} - Powered by&nbsp;
-        <a href="https://coincap.io/" target="_blank" rel="noopener noreferrer">
-          coincap.io
-        </a>
-      </p>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Symbol</th>
-            <th>Price in USD</th>
-            <th>Volume</th>
-            <th>% Change in 24h</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data &&
-            data.map((coin) => {
-              return (
-                <tr key={coin.id}>
-                  <td>{coin.rank}</td>
-                  <td style={{ textDecoration: "none", color: "inherit" }}>
-                    <a
-                      href={coin.explorer}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {coin.symbol}
-                    </a>
-                  </td>
-                  <td className="price">{formatPrice(coin.priceUsd)}</td>
-                  <td>{parseFloat(coin.volumeUsd24Hr).toFixed(2)}</td>
-                  <td
-                    className={
-                      coin.changePercent24Hr < 0
-                        ? "text-danger"
-                        : "text-success"
-                    }
-                  >
-                    {parseFloat(coin.changePercent24Hr).toFixed(2)}
-                  </td>
-                  <td>
-                    {/* Render trade button or trade form */}
-                    {isTrading(coin.id) ? (
-                      <form>
-                        {/* Dropdown menu for selecting available currencies */}
-                        <select
-                          name="fromCoin"
-                          value={tradeData.fromCoin}
-                          onChange={handleInputChange}
+      {localTime == "Invalid date" ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <p>
+            Last updated on {localTime} - Powered by&nbsp;
+            <a
+              href="https://coincap.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              coincap.io
+            </a>
+          </p>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Symbol</th>
+                <th>Price in USD</th>
+                <th>Volume</th>
+                <th>% Change in 24h</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data &&
+                data.map((coin) => {
+                  return (
+                    <tr key={coin.id}>
+                      <td>{coin.rank}</td>
+                      <td style={{ textDecoration: "none", color: "inherit" }}>
+                        <a
+                          href={coin.explorer}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          {Object.keys(testUser.balance).map(
-                            (currency) =>
-                              currency !== coin.id && (
-                                <option key={currency} value={currency}>
-                                  {currency}
-                                </option>
-                              )
-                          )}
-                        </select>
+                          {coin.symbol}
+                        </a>
+                      </td>
+                      <td className="price">{formatPrice(coin.priceUsd)}</td>
+                      <td>{parseFloat(coin.volumeUsd24Hr).toFixed(2)}</td>
+                      <td
+                        className={
+                          coin.changePercent24Hr < 0
+                            ? "text-danger"
+                            : "text-success"
+                        }
+                      >
+                        {parseFloat(coin.changePercent24Hr).toFixed(2)}
+                      </td>
+                      <td>
+                        {/* Render trade button or trade form */}
+                        {isTrading(coin.id) ? (
+                          <form>
+                            {/* Dropdown menu for selecting available currencies */}
+                            <select
+                              name="fromCoin"
+                              value={tradeData.fromCoin}
+                              onChange={handleInputChange}
+                            >
+                              {Object.keys(testUser.balance).map(
+                                (currency) =>
+                                  currency !== coin.id && (
+                                    <option key={currency} value={currency}>
+                                      {currency}
+                                    </option>
+                                  )
+                              )}
+                            </select>
 
-                        {/* Display the available balance */}
-                        <div>
-                          Available Balance:
-                          {testUser.balance[tradeData.fromCoin] &&
-                            addCommasToThousands(
-                              testUser.balance[tradeData.fromCoin]
-                            )}
-                        </div>
+                            {/* Display the available balance */}
+                            <div>
+                              Available Balance:
+                              {testUser.balance[tradeData.fromCoin] &&
+                                addCommasToThousands(
+                                  testUser.balance[tradeData.fromCoin]
+                                )}
+                            </div>
 
-                        {/* Calculate the amount that the available balance would buy */}
-                        <div>
-                          {coin.name} Amount:
-                          {calculateAmount(
-                            tradeData.fromCoin,
-                            coin,
-                            tradeData.fromCoinAmount
-                          )}
-                        </div>
+                            {/* Calculate the amount that the available balance would buy */}
+                            <div>
+                              {coin.name} Amount:
+                              {calculateAmount(
+                                tradeData.fromCoin,
+                                coin,
+                                tradeData.fromCoinAmount
+                              )}
+                            </div>
 
-                        {/* Input field for the trade amount */}
-                        <input
-                          type="number"
-                          name="fromCoinAmount"
-                          value={tradeData.fromCoinAmount}
-                          onChange={handleInputChange}
-                          placeholder="Trade amount"
-                        />
-                        <button
-                          type="submit"
-                          onClick={(e) => handleTradeSubmit(e, coin.id)}
-                        >
-                          Trade
-                        </button>
-                      </form>
-                    ) : (
-                      <button onClick={() => tradeButtonClick(coin.id)}>
-                        Trade
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
+                            {/* Input field for the trade amount */}
+                            <input
+                              type="number"
+                              name="fromCoinAmount"
+                              value={tradeData.fromCoinAmount}
+                              onChange={handleInputChange}
+                              placeholder="Trade amount"
+                            />
+                            <button
+                              type="submit"
+                              onClick={(e) => handleTradeSubmit(e, coin.id)}
+                            >
+                              Trade
+                            </button>
+                          </form>
+                        ) : (
+                          <button onClick={() => tradeButtonClick(coin.id)}>
+                            Trade
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

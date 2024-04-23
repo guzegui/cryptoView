@@ -490,6 +490,19 @@
         "dogecoin": 10,
         "bitcoin": 1.47495661
       }
+    },
+    {
+      "id": "24f8",
+      "username": "user1",
+      "email": "user1@user.com",
+      "password": "user1",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 10,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
     }
   ]
 }

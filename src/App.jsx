@@ -116,7 +116,7 @@ MAYBE, user needs to be handled in app.jsx
 
   return (
     <div>
-      <Navbar loggedInState={loggedInState} handleLogOut={handleLogOut} />
+      <Navbar loggedInState={loggedInState} handleLogOut={handleLogOut} users={users} />
       <Routes>
         <Route
           path="/"
