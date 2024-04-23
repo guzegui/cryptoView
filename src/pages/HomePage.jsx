@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const jsonServer = "http://localhost:3000/users";
 
@@ -17,6 +18,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     id: "",
   });
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const navigate = useNavigate();
 
   // Sample user data for testing
   const testUser = loggedInUser
@@ -227,8 +229,9 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
         availableBalance: "",
         tradeAmount: "",
       });
-      setTradeFormVisible({ isTrading: false, id: "" });
     }
+    setTradeFormVisible({ isTrading: false, id: "" });
+    navigate(`/`);
   }
 
   //   useEffect(() => {
@@ -312,11 +315,13 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                         {/* Display the available balance */}
                         <div>
                           Available Balance:
-                          {testUser.balance[tradeData.fromCoin] && addCommasToThousands(
-                            testUser.balance[tradeData.fromCoin]
+                          {testUser.balance[tradeData.fromCoin] &&
+                            addCommasToThousands(
+                              testUser.balance[tradeData.fromCoin]
+                            )}
+                          {console.log(
+                            typeof testUser.balance[tradeData.fromCoin]
                           )}
-                          {console.log(typeof testUser.balance[tradeData.fromCoin])}
-
                         </div>
 
                         {/* Calculate the amount that the available balance would buy */}
