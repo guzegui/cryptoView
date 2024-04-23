@@ -44,7 +44,7 @@ function SignUpPage({ loggedInState, handleLogin }) {
     axios
       .post(`${jsonServer}`, formData)
       .then((response) => {
-        handleLogin(response.data);
+        handleLogin(response.data, undefined);
         navigate(`/`);
       })
       .catch((error) => {

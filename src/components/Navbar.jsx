@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Navbar({ loggedInState, handleLogOut, users }) {
+function Navbar({ loggedInState, handleLogOut, users, handleLogin }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loginFormData, setLoginFormData] = useState({
     usernameOrEmail: "",
@@ -36,7 +36,7 @@ function Navbar({ loggedInState, handleLogOut, users }) {
       alert("Incorrect password");
       return;
     }
-
+    handleLogin(undefined, user);
     // Handle successful login (e.g., setLoggedInUser)
     // setLoggedInUser(user);
 
@@ -92,7 +92,7 @@ function Navbar({ loggedInState, handleLogOut, users }) {
                       onChange={handleInputChange}
                     />
                   </div>
-                  <button type="submit" className="btn btn-primary">
+                  <button type="submit" className="btn btn-primary" onClick={() => handleLoginSubmit}>
                     Sign in
                   </button>
                 </form>

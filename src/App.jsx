@@ -87,9 +87,22 @@ MAYBE, user needs to be handled in app.jsx
 
 */
 
-  const handleLogin = (formData) => {
-    localStorage.setItem("loggedInUser", JSON.stringify(formData));
-    setUser(formData);
+  function handleLogin(formData, user){
+    if (user == undefined) {
+      localStorage.setItem("loggedInUser", JSON.stringify(formData));
+      setUser(formData);
+    } else {
+      axios
+        .get(`${jsonServer}/${user.id}`)
+        .then((response) => {
+          const data = response.data;
+          localStorage.setItem("loggedInUser", JSON.stringify(data));
+          setUser(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
     localStorage.getItem("loggedInUser");
     navigate(`/`);
   };
@@ -116,7 +129,11 @@ MAYBE, user needs to be handled in app.jsx
 
   return (
     <div>
-      <Navbar loggedInState={loggedInState} handleLogOut={handleLogOut} users={users} />
+      <Navbar
+        loggedInState={loggedInState}
+        handleLogOut={handleLogOut}
+        users={users} handleLogin={handleLogin}
+      />
       <Routes>
         <Route
           path="/"
