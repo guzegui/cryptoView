@@ -175,40 +175,33 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
         });
     } else {
       // Perform trade logic here
-      console.log(coinId);
-      console.log(
-        "the trade is worth " +
-          tradeData.tradeAmount +
-          " which is of type " +
-          typeof tradeData.tradeAmount +
-          " new balance of " +
-          coinId +
-          " BOUGHT should be " +
-          testUser.balance[coinId] +
-          tradeData.tradeAmount +
-          " of type " +
-          typeof testUser.balance[coinId]
-      );
-      console.log(
-        "new balance of " +
-          tradeData.fromCoin +
-          " SOLD should be " +
-          testUser.balance[tradeData.fromCoin] -
-          tradeData.tradeAmount
-      );
 
-      console.log(`${jsonServer}/${testUser.id}`);
+      let updatedUser = {};
 
-      const updatedUser = {
-        ...testUser,
-        balance: {
-          ...testUser.balance,
-          [coinId]:
-            testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
-          [tradeData.fromCoin]:
-            testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
-        },
-      };
+      // If toCoin exists, then update the value
+      if (Object.keys(testUser.balance).some((e) => e == tradeData.toCoin)) {
+        updatedUser = {
+          ...testUser,
+          balance: {
+            ...testUser.balance,
+            [coinId]:
+              testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
+            [tradeData.fromCoin]:
+              testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
+          },
+        };
+      } else {
+        // Otherwise, create new entry and initialize with the toCoinAmount
+        updatedUser = {
+          ...testUser,
+          balance: {
+            ...testUser.balance,
+            [tradeData.toCoin]: parseFloat(tradeData.toCoinAmount),
+            [tradeData.fromCoin]:
+              testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
+          },
+        };
+      }
 
       axios
         .put(`${jsonServer}/${testUser.id}`, updatedUser)

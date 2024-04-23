@@ -331,6 +331,90 @@
         "dogecoin": 10,
         "bitcoin": null
       }
+    },
+    {
+      "id": "f027",
+      "username": "a",
+      "email": "a",
+      "password": "a",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 9.43643232,
+        "litecoin": 10,
+        "dogecoin": 10,
+        "ethereum": null
+      }
+    },
+    {
+      "id": "fdf7",
+      "username": "w",
+      "email": "w",
+      "password": "w",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 8,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10,
+        "solana": null,
+        "xrp": null
+      }
+    },
+    {
+      "id": "97f6",
+      "username": "q",
+      "email": "q",
+      "password": "q",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 9,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10,
+        "solana": null
+      }
+    },
+    {
+      "id": "1076",
+      "username": "w",
+      "email": "w",
+      "password": "w",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 9,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10,
+        "solana": null
+      }
+    },
+    {
+      "id": "3048",
+      "username": "e",
+      "email": "e",
+      "password": "e",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 9,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10,
+        "coinId": 0.0062867
+      }
+    },
+    {
+      "id": "b881",
+      "username": "e",
+      "email": "e",
+      "password": "e",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 7,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10,
+        "solana": 840.1604715899999
+      }
     }
   ]
 }
