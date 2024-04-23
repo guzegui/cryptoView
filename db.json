@@ -268,8 +268,18 @@
       "email": "w",
       "password": "w",
       "balance": {
-        "dollars": 99990000,
-        "bitcoin": 10.15638441,
+        "bitcoin": 1521.11797311,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
+    },
+    {
+      "id": "2dfc",
+      "username": "s",
+      "email": "s",
+      "password": "s",
+      "balance": {
         "ethereum": 10,
         "litecoin": 10,
         "dogecoin": 10

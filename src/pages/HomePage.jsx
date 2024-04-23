@@ -44,7 +44,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
 
     if (name === "fromCoinAmount") {
       const toCoin = data.find((element) => element.id === tradeFormVisible.id);
-      const toCoinAmount = calculateAmount(tradeData.fromCoin, toCoin, value); 
+      const toCoinAmount = calculateAmount(tradeData.fromCoin, toCoin, value);
       setTradeData({
         ...tradeData,
         fromCoinAmount: value,
@@ -132,67 +132,102 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     e.preventDefault();
     // Check if the trade amount is greater than the available balance
     if (
-      parseFloat(tradeData.tradeAmount) > testUser.balance[tradeData.fromCoin]
+      parseFloat(tradeData.fromCoinAmount) >
+      testUser.balance[tradeData.fromCoin]
     ) {
       alert("You don't have enough balance!");
       return;
-    }
-    // Perform trade logic here
-    console.log(coinId);
-    console.log(
-      "the trade is worth " +
-        tradeData.tradeAmount +
-        " which is of type " +
-        typeof tradeData.tradeAmount +
-        " new balance of " +
-        coinId +
-        " BOUGHT should be " +
-        testUser.balance[coinId] +
-        tradeData.tradeAmount +
-        " of type " +
-        typeof testUser.balance[coinId]
-    );
-    console.log(
-      "new balance of " +
-        tradeData.fromCoin +
-        " SOLD should be " +
-        testUser.balance[tradeData.fromCoin] -
-        tradeData.tradeAmount
-    );
+    } else if (
+      parseFloat(tradeData.fromCoinAmount) ==
+      testUser.balance[tradeData.fromCoin]
+    ) {
+      console.log("You ran out of moolah!!");
+      // Create a copy of the user's balance object
+      const updatedBalance = { ...testUser.balance };
 
-    console.log(`${jsonServer}/${testUser.id}`);
+      // Remove the entry corresponding to the spent currency
+      delete updatedBalance[tradeData.fromCoin];
 
-    const updatedUser = {
-      ...testUser,
-      balance: {
-        ...testUser.balance,
-        [coinId]: testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
-        [tradeData.fromCoin]:
+      // Make the Axios request to update the user's balance with the updated balance object
+      axios
+        .put(`${jsonServer}/${testUser.id}`, {
+          ...testUser,
+          balance: updatedBalance,
+        })
+        .then((response) => {
+          // Handle success response
+          console.log(
+            "Currency entry deleted from balance:",
+            tradeData.fromCoin
+          );
+          const updatedUser = {
+            ...testUser,
+          balance: updatedBalance,
+          };
+          localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+        })
+        .catch((error) => {
+          // Handle error
+          console.log("Error deleting currency entry:", error);
+        });
+    } else {
+      // Perform trade logic here
+      console.log(coinId);
+      console.log(
+        "the trade is worth " +
+          tradeData.tradeAmount +
+          " which is of type " +
+          typeof tradeData.tradeAmount +
+          " new balance of " +
+          coinId +
+          " BOUGHT should be " +
+          testUser.balance[coinId] +
+          tradeData.tradeAmount +
+          " of type " +
+          typeof testUser.balance[coinId]
+      );
+      console.log(
+        "new balance of " +
+          tradeData.fromCoin +
+          " SOLD should be " +
           testUser.balance[tradeData.fromCoin] -
-          tradeData.fromCoinAmount,
-      },
-    }
+          tradeData.tradeAmount
+      );
 
-    axios
-      .put(`${jsonServer}/${testUser.id}`, updatedUser)
-      .then((response) => {
-        // Handle success response
-        localStorage.setItem("loggedInUser", JSON.stringify(updatedUser))
-        console.log(response.data); // Log the response data
-      })
-      .catch((error) => {
-        // Handle error
-        console.log(error); // Log the error
+      console.log(`${jsonServer}/${testUser.id}`);
+
+      const updatedUser = {
+        ...testUser,
+        balance: {
+          ...testUser.balance,
+          [coinId]:
+            testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
+          [tradeData.fromCoin]:
+            testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
+        },
+      };
+
+      axios
+        .put(`${jsonServer}/${testUser.id}`, updatedUser)
+        .then((response) => {
+          // Handle success response
+          localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+          console.log(response.data); // Log the response data
+        })
+        .catch((error) => {
+          // Handle error
+          console.log(error); // Log the error
+        });
+
+      // Reset trade amount and hide trade form
+      setTradeData({
+        fromCoin: Object.keys(testUser.balance)[0],
+        toCoin: "",
+        availableBalance: "",
+        tradeAmount: "",
       });
-
-    // Reset trade amount and hide trade form
-    setTradeData({
-      fromCoin: Object.keys(testUser.balance)[0],
-      toCoin: "",
-      availableBalance: "",
-      tradeAmount: "",
-    });
-    setTradeFormVisible({ isTrading: false, id: "" });
+      setTradeFormVisible({ isTrading: false, id: "" });
+    }
   }
 
   //   useEffect(() => {
@@ -256,13 +291,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                   <td>
                     {/* Render trade button or trade form */}
                     {isTrading(coin.id) ? (
-                      <form
-                        onSubmit={{
-                          function(e) {
-                            handleTradeSubmit(e, coin.id);
-                          },
-                        }}
-                      >
+                      <form>
                         {/* Dropdown menu for selecting available currencies */}
                         <select
                           name="fromCoin"
