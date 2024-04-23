@@ -61,23 +61,40 @@ function NewsPage() {
   };
 
   return (
-    <div>
-      <button onClick={handleGetMoreNews}>Load More News</button>
-
-      <ul>
-        {news.map((item, index) => (
-          <li key={index}>
-            <h2>{item.title}</h2>
-            <p>{item.textContent}</p>
-            <p>Category: {item.category}</p>
-            <p>Publication Date: {item.pubDate}</p>
-            <img src={item.imageSource} alt="News" />
-            <a href={item.link} target="_blank" rel="noreferrer">
-              Read more
-            </a>
-          </li>
-        ))}
-      </ul>
+    <div className="container mt-5">
+      <button className="btn btn-primary mb-3" onClick={handleGetMoreNews}>
+        Load More News
+      </button>
+      <ul className="list-group">
+  {news.map((item, index) => (
+    <li key={index} className="list-group-item">
+      <div className="row">
+        <div className="col-md-3">
+          <img
+            src={item.imageSource}
+            alt="News"
+            className="img-fluid"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+        </div>
+        <div className="col-md-9">
+          <h2>{item.title}</h2>
+          <p>{item.textContent}</p>
+          <p>Category: {item.category}</p>
+          <p>Publication Date: {item.pubDate}</p>
+          <a
+            href={item.link}
+            className="btn btn-primary"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Read more
+          </a>
+        </div>
+      </div>
+    </li>
+  ))}
+</ul>
     </div>
   );
 }
