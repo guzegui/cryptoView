@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Navbar({ loggedInState, handleLogOut, users, handleLogin }) {
+function Navbar({  handleLogOut, users, handleLogin }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loginFormData, setLoginFormData] = useState({
     usernameOrEmail: "",
@@ -37,11 +37,6 @@ function Navbar({ loggedInState, handleLogOut, users, handleLogin }) {
       return;
     }
     handleLogin(undefined, user);
-    // Handle successful login (e.g., setLoggedInUser)
-    // setLoggedInUser(user);
-
-    // Optionally, redirect the user to the dashboard or another page
-    // history.push('/dashboard');
   };
 
   return (

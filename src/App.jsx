@@ -20,8 +20,9 @@ function App() {
   const [tableInfo, setTableInfo] = useState({});
   const [previousTableInfo, setPreviousTableInfo] = useState([]);
   const [users, setUsers] = useState({});
-  const [loggedInState, setLoggedInState] = useState("");
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("loggedInUser")));
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("loggedInUser"))
+  );
   const navigate = useNavigate();
 
   // Crypto data from API
@@ -87,7 +88,7 @@ MAYBE, user needs to be handled in app.jsx
 
 */
 
-  function handleLogin(formData, user){
+  function handleLogin(formData, user) {
     if (user == undefined) {
       localStorage.setItem("loggedInUser", JSON.stringify(formData));
       setUser(formData);
@@ -105,7 +106,7 @@ MAYBE, user needs to be handled in app.jsx
     }
     localStorage.getItem("loggedInUser");
     navigate(`/`);
-  };
+  }
 
   const handleLogOut = () => {
     localStorage.removeItem("loggedInUser");
@@ -130,9 +131,9 @@ MAYBE, user needs to be handled in app.jsx
   return (
     <div>
       <Navbar
-        loggedInState={loggedInState}
         handleLogOut={handleLogOut}
-        users={users} handleLogin={handleLogin}
+        users={users}
+        handleLogin={handleLogin}
       />
       <Routes>
         <Route
@@ -159,12 +160,7 @@ MAYBE, user needs to be handled in app.jsx
         />
         <Route
           path="/signup"
-          element={
-            <SignUpPage
-              loggedInState={loggedInState}
-              handleLogin={handleLogin}
-            ></SignUpPage>
-          }
+          element={<SignUpPage handleLogin={handleLogin}></SignUpPage>}
         />
       </Routes>
     </div>

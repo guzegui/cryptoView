@@ -9,7 +9,7 @@ const jsonServer = "http://localhost:3000/users";
 npx json-server --watch db.json --port 3000
 */
 
-function SignUpPage({ loggedInState, handleLogin }) {
+function SignUpPage({  handleLogin }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
