@@ -44,20 +44,26 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "fromCoinAmount") {
+    if (name === "fromCoinAmount" || name === "fromCoin") {
       const toCoin = data.find((element) => element.id === tradeFormVisible.id);
-      const toCoinAmount = calculateAmount(tradeData.fromCoin, toCoin, value);
-      setTradeData({
-        ...tradeData,
-        fromCoinAmount: value,
-        toCoinAmount: toCoinAmount,
-        toCoin: toCoin.id,
-      });
-    } else {
-      setTradeData({
-        ...tradeData,
-        [name]: value,
-      });
+      
+      if (name === "fromCoinAmount") {
+        const toCoinAmount = calculateAmount(tradeData.fromCoin, toCoin, value);
+        setTradeData({
+          ...tradeData,
+          fromCoinAmount: value,
+          toCoinAmount: toCoinAmount,
+          toCoin: toCoin.id,
+        });
+      } else {
+        const toCoinAmount = calculateAmount(value, toCoin, tradeData.fromCoinAmount);
+        setTradeData({
+          ...tradeData,
+          fromCoin: value,
+          toCoinAmount: toCoinAmount,
+          toCoin: toCoin.id,
+        });
+      }
     }
 
     if (name === "tradeAmount") {
