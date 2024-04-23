@@ -160,6 +160,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
             "Currency entry deleted from balance:",
             tradeData.fromCoin
           );
+          // Update user in localStorage
           const updatedUser = {
             ...testUser,
             balance: updatedBalance,
