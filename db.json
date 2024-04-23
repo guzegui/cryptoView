@@ -503,6 +503,19 @@
         "litecoin": 10,
         "dogecoin": 10
       }
+    },
+    {
+      "id": "fcac",
+      "username": "w",
+      "email": "w",
+      "password": "w",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 10,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
     }
   ]
 }

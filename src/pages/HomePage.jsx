@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const jsonServer = "http://localhost:3000/users";
 
-function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
+function HomePage({ tableInfo, previousTableInfo, addCommasToThousands, user }) {
   const { data } = tableInfo;
   const { timestamp } = tableInfo;
   const localTime = moment
@@ -17,7 +17,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
     isTrading: false,
     id: "",
   });
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = user;
   const navigate = useNavigate();
 
   // Sample user data for testing
@@ -249,7 +249,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
   // toCoin: tradeFormVisible.id,
   // });
   // }, [tableInfo, tradeFormVisible, tradeData]);
-console.log(localTime);
+
   return (
     <div>
       {localTime == "Invalid date" ? (

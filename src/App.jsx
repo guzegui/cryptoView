@@ -21,7 +21,7 @@ function App() {
   const [previousTableInfo, setPreviousTableInfo] = useState([]);
   const [users, setUsers] = useState({});
   const [loggedInState, setLoggedInState] = useState("");
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("loggedInUser")));
   const navigate = useNavigate();
 
   // Crypto data from API
