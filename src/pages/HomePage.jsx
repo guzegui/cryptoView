@@ -46,36 +46,40 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
 
     if (name === "fromCoinAmount" || name === "fromCoin") {
       const toCoin = data.find((element) => element.id === tradeFormVisible.id);
-      
+
       if (name === "fromCoinAmount") {
-        const toCoinAmount = calculateAmount(tradeData.fromCoin, toCoin, value);
-        setTradeData({
-          ...tradeData,
-          fromCoinAmount: value,
-          toCoinAmount: toCoinAmount,
-          toCoin: toCoin.id,
-        });
+        if (value > testUser.balance[tradeData.fromCoin]) {
+          alert("You don't have enough balance!");
+          setTradeData({
+            ...tradeData,
+            tradeAmount: value - 1,
+          });
+          return;
+        } else {
+          const toCoinAmount = calculateAmount(
+            tradeData.fromCoin,
+            toCoin,
+            value
+          );
+          setTradeData({
+            ...tradeData,
+            fromCoinAmount: value,
+            toCoinAmount: toCoinAmount,
+            toCoin: toCoin.id,
+          });
+        }
       } else {
-        const toCoinAmount = calculateAmount(value, toCoin, tradeData.fromCoinAmount);
+        const toCoinAmount = calculateAmount(
+          value,
+          toCoin,
+          tradeData.fromCoinAmount
+        );
         setTradeData({
           ...tradeData,
           fromCoin: value,
           toCoinAmount: toCoinAmount,
           toCoin: toCoin.id,
         });
-      }
-    }
-
-    if (name === "tradeAmount") {
-      if (
-        parseFloat(tradeData.tradeAmount) > testUser.balance[selectedCurrency]
-      ) {
-        alert("You don't have enough balance!");
-        setTradeData({
-          ...tradeData,
-          tradeAmount: testUser.balance[selectedCurrency],
-        });
-        return;
       }
     }
   };
