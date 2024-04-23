@@ -162,7 +162,7 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
           );
           const updatedUser = {
             ...testUser,
-          balance: updatedBalance,
+            balance: updatedBalance,
           };
           localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
         })
@@ -358,24 +358,26 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
 
 HomePage.propTypes = {
   tableInfo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    rank: PropTypes.number.isRequired,
-    symbol: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    priceUsd: PropTypes.string.isRequired,
-    volumeUsd24Hr: PropTypes.string.isRequired,
-    marketCapUsd: PropTypes.string.isRequired,
-    availableSupply: PropTypes.string.isRequired,
-    totalSupply: PropTypes.string.isRequired,
-    changePercent24Hr: PropTypes.string.isRequired,
-    vwap24Hr: PropTypes.string.isRequired,
-    explorer: PropTypes.string.isRequired,
-    timestamp: PropTypes.number.isRequired,
+    id: PropTypes.number,
+    rank: PropTypes.number,
+    symbol: PropTypes.string,
+    name: PropTypes.string,
+    priceUsd: PropTypes.string,
+    volumeUsd24Hr: PropTypes.string,
+    marketCapUsd: PropTypes.string,
+    availableSupply: PropTypes.string,
+    totalSupply: PropTypes.string,
+    changePercent24Hr: PropTypes.string,
+    vwap24Hr: PropTypes.string,
+    explorer: PropTypes.string,
+    timestamp: PropTypes.number,
   }).isRequired,
-  previousTableInfo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    priceUsd: PropTypes.string.isRequired,
-  }).isRequired,
+  previousTableInfo: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      priceUsd: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default HomePage;

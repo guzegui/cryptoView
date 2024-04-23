@@ -18,7 +18,7 @@ npx json-server --watch db.json --port 3000
 
 function App() {
   const [tableInfo, setTableInfo] = useState({});
-  const [previousTableInfo, setPreviousTableInfo] = useState({});
+  const [previousTableInfo, setPreviousTableInfo] = useState([]);
   const [users, setUsers] = useState({});
   const [loggedInState, setLoggedInState] = useState("");
   const [user, setUser] = useState({});
