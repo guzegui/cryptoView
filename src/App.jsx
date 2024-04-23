@@ -101,9 +101,15 @@ MAYBE, user needs to be handled in app.jsx
   function addCommasToThousands(integerPart) {
     // Convert to string if it's a number
     if (typeof integerPart === "number") {
-      integerPart = integerPart.toString();
+      // Check if it's a floating-point number with more than two decimal places
+      const decimalPart = integerPart.toString().split(".")[1];
+      if (decimalPart && decimalPart.length > 2) {
+        // Round to two decimal places
+        integerPart = parseFloat(integerPart.toFixed(2)).toString();
+      } else {
+        integerPart = integerPart.toString();
+      }
     }
-
     // Regex to add commas for thousands
     return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }

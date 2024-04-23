@@ -485,10 +485,10 @@
       "password": "e",
       "balance": {
         "dollars": 100000000,
-        "bitcoin": 9,
-        "ethereum": 30.67869712,
+        "ethereum": 0.17869711999999893,
         "litecoin": 10,
-        "dogecoin": 10
+        "dogecoin": 10,
+        "bitcoin": 1.47495661
       }
     }
   ]

@@ -318,9 +318,6 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands }) {
                             addCommasToThousands(
                               testUser.balance[tradeData.fromCoin]
                             )}
-                          {console.log(
-                            typeof testUser.balance[tradeData.fromCoin]
-                          )}
                         </div>
 
                         {/* Calculate the amount that the available balance would buy */}
