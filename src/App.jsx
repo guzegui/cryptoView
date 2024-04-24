@@ -160,7 +160,7 @@ MAYBE, user needs to be handled in app.jsx
         />
         <Route
           path="/signup"
-          element={<SignUpPage handleLogin={handleLogin}></SignUpPage>}
+          element={<SignUpPage handleLogin={handleLogin} users={users}></SignUpPage>}
         />
       </Routes>
     </div>

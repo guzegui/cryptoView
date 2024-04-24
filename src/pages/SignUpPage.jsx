@@ -9,7 +9,7 @@ const jsonServer = "http://localhost:3000/users";
 npx json-server --watch db.json --port 3000
 */
 
-function SignUpPage({  handleLogin }) {
+function SignUpPage({ handleLogin, users }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -26,6 +26,27 @@ function SignUpPage({  handleLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  // Email should be "example@example.com". Dashes are valid
+  // Passwords should have at least 8 characters, and contain letters, special characters and numbers
+  const regexCheck = (email, password) => {
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    const isEmailValid = emailRegex.test(email);
+    const isPasswordValid = passwordRegex.test(password);
+
+    if (!isEmailValid && !isPasswordValid) {
+      return "both invalid";
+    } else if (!isEmailValid) {
+      return "invalid email";
+    } else if (!isPasswordValid) {
+      return "invalid password";
+    } else {
+      return "both pass";
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -41,15 +62,51 @@ function SignUpPage({  handleLogin }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    axios
-      .post(`${jsonServer}`, formData)
-      .then((response) => {
-        handleLogin(response.data, undefined);
-        navigate(`/`);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    let isEverythingOk = false;
+
+    // Check validity of password and email
+    const validity = regexCheck(formData.email, formData.password);
+    if (validity === "both invalid") {
+      alert(
+        "Invalid email and password! Password should be at least 8 characters long and contain letters, numbers and special characters."
+      );
+    } else if (validity === "invalid email") {
+      alert("Invalid email! ex. example@example.com");
+    } else if (validity === "invalid password") {
+      alert(
+        "Invalid password! It should be at least 8 characters long and contain letters, numbers and special characters"
+      );
+    } else {
+      // Check if email or username already exists
+      const emailExists = users.some((user) => user.email === formData.email);
+      const usernameExists = users.some(
+        (user) => user.username === formData.username
+      );
+
+      if (emailExists || usernameExists) {
+        if (emailExists && usernameExists) {
+          alert("Email and username already exist!");
+        } else if (usernameExists) {
+          alert("Username already exists");
+        } else {
+          alert("Email already exists");
+        }
+      } else {
+        isEverythingOk = true;
+      }
+    }
+
+    if (isEverythingOk) {
+      axios
+        .post(`${jsonServer}`, formData)
+        .then((response) => {
+          handleLogin(response.data, undefined);
+          navigate(`/`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
