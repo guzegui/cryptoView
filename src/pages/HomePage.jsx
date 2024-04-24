@@ -6,7 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 const jsonServer = "http://localhost:3000/users";
 
-function HomePage({ tableInfo, previousTableInfo, addCommasToThousands, user }) {
+function HomePage({
+  tableInfo,
+  previousTableInfo,
+  addCommasToThousands,
+  user,
+}) {
   const { data } = tableInfo;
   const { timestamp } = tableInfo;
   const localTime = moment
@@ -149,89 +154,104 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands, user }) 
     ) {
       alert("You don't have enough balance!");
       return;
-    } else if (
-      parseFloat(tradeData.fromCoinAmount) ==
-      testUser.balance[tradeData.fromCoin]
-    ) {
-      console.log("You ran out of moolah!!");
-      // Create a copy of the user's balance object
-      const updatedBalance = { ...testUser.balance };
+    } else {
+      // Throw alert with trading info
+      alert(
+        `You are trading ${tradeData.fromCoinAmount} ${
+          tradeData.fromCoin
+        } for ${tradeData.toCoinAmount} ${
+          tradeData.toCoin
+        }. After this trade, you'll have ${
+          testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount
+        } ${tradeData.fromCoin} and ${
+          testUser.balance[tradeData.toCoin] +
+          parseFloat(tradeData.toCoinAmount)
+        } ${tradeData.toCoin} left`
+      );
+      if (
+        parseFloat(tradeData.fromCoinAmount) ==
+        testUser.balance[tradeData.fromCoin]
+      ) {
+        console.log("You ran out of moolah!!");
+        // Create a copy of the user's balance object
+        const updatedBalance = { ...testUser.balance };
 
-      // Remove the entry corresponding to the spent currency
-      delete updatedBalance[tradeData.fromCoin];
+        // Remove the entry corresponding to the spent currency
+        delete updatedBalance[tradeData.fromCoin];
 
-      // Make the Axios request to update the user's balance with the updated balance object
-      axios
-        .put(`${jsonServer}/${testUser.id}`, {
-          ...testUser,
-          balance: updatedBalance,
-        })
-        .then((response) => {
-          // Handle success response
-          console.log(
-            "Currency entry deleted from balance:",
-            tradeData.fromCoin
-          );
-          // Update user in localStorage
-          const updatedUser = {
+        // Make the Axios request to update the user's balance with the updated balance object
+        axios
+          .put(`${jsonServer}/${testUser.id}`, {
             ...testUser,
             balance: updatedBalance,
-          };
-          localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
-        })
-        .catch((error) => {
-          // Handle error
-          console.log("Error deleting currency entry:", error);
-        });
-    } else {
-      // Perform trade logic here
-
-      let updatedUser = {};
-
-      // If toCoin exists, then update the value
-      if (Object.keys(testUser.balance).some((e) => e == tradeData.toCoin)) {
-        updatedUser = {
-          ...testUser,
-          balance: {
-            ...testUser.balance,
-            [coinId]:
-              testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
-            [tradeData.fromCoin]:
-              testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
-          },
-        };
+          })
+          .then((response) => {
+            // Handle success response
+            console.log(
+              "Currency entry deleted from balance:",
+              tradeData.fromCoin
+            );
+            // Update user in localStorage
+            const updatedUser = {
+              ...testUser,
+              balance: updatedBalance,
+            };
+            localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+          })
+          .catch((error) => {
+            // Handle error
+            console.log("Error deleting currency entry:", error);
+          });
       } else {
-        // Otherwise, create new entry and initialize with the toCoinAmount
-        updatedUser = {
-          ...testUser,
-          balance: {
-            ...testUser.balance,
-            [tradeData.toCoin]: parseFloat(tradeData.toCoinAmount),
-            [tradeData.fromCoin]:
-              testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
-          },
-        };
-      }
+        // Perform trade logic here
 
-      axios
-        .put(`${jsonServer}/${testUser.id}`, updatedUser)
-        .then((response) => {
-          // Handle success response
-          localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
-          console.log(response.data); // Log the response data
-        })
-        .catch((error) => {
-          // Handle error
-          console.log(error); // Log the error
+        let updatedUser = {};
+
+        // If toCoin exists, then update the value
+        if (Object.keys(testUser.balance).some((e) => e == tradeData.toCoin)) {
+          updatedUser = {
+            ...testUser,
+            balance: {
+              ...testUser.balance,
+              [coinId]:
+                testUser.balance[coinId] + parseFloat(tradeData.toCoinAmount),
+              [tradeData.fromCoin]:
+                testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
+            },
+          };
+        } else {
+          // Otherwise, create new entry and initialize with the toCoinAmount
+          updatedUser = {
+            ...testUser,
+            balance: {
+              ...testUser.balance,
+              [tradeData.toCoin]: parseFloat(tradeData.toCoinAmount),
+              [tradeData.fromCoin]:
+                testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount,
+            },
+          };
+        }
+
+        axios
+          .put(`${jsonServer}/${testUser.id}`, updatedUser)
+          .then((response) => {
+            // Handle success response
+            localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+            console.log(response.data); // Log the response data
+          })
+          .catch((error) => {
+            // Handle error
+            console.log(error); // Log the error
+          });
+
+        // Reset trade amount and hide trade form
+        setTradeData({
+          fromCoin: Object.keys(testUser.balance)[0],
+          toCoin: "",
+          availableBalance: "",
+          tradeAmount: "",
         });
-
-      // Reset trade amount and hide trade form
-      setTradeData({
-        fromCoin: Object.keys(testUser.balance)[0],
-        toCoin: "",
-        availableBalance: "",
-        tradeAmount: "",
-      });
+      }
     }
     setTradeFormVisible({ isTrading: false, id: "" });
     navigate(`/`);
@@ -293,7 +313,9 @@ function HomePage({ tableInfo, previousTableInfo, addCommasToThousands, user }) 
                         </a>
                       </td>
                       <td className="price">{formatPrice(coin.priceUsd)}</td>
-                      <td>{parseFloat(coin.volumeUsd24Hr).toFixed(2)}</td>
+                      <td>
+                        {formatPrice(parseFloat(coin.volumeUsd24Hr).toFixed(2))}
+                      </td>
                       <td
                         className={
                           coin.changePercent24Hr < 0
