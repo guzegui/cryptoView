@@ -294,7 +294,7 @@ function HomePage({
                 <th>Price in USD</th>
                 <th>Volume</th>
                 <th>% Change in 24h</th>
-                <th>Actions</th>
+                {loggedInUser && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -325,66 +325,68 @@ function HomePage({
                       >
                         {parseFloat(coin.changePercent24Hr).toFixed(2)}
                       </td>
-                      <td>
-                        {/* Render trade button or trade form */}
-                        {isTrading(coin.id) ? (
-                          <form>
-                            {/* Dropdown menu for selecting available currencies */}
-                            <select
-                              name="fromCoin"
-                              value={tradeData.fromCoin}
-                              onChange={handleInputChange}
-                            >
-                              {Object.keys(testUser.balance).map(
-                                (currency) =>
-                                  currency !== coin.id && (
-                                    <option key={currency} value={currency}>
-                                      {currency}
-                                    </option>
-                                  )
-                              )}
-                            </select>
-
-                            {/* Display the available balance */}
-                            <div>
-                              Available Balance:
-                              {testUser.balance[tradeData.fromCoin] &&
-                                addCommasToThousands(
-                                  testUser.balance[tradeData.fromCoin]
+                      {loggedInUser && (
+                        <td>
+                          {/* Render trade button or trade form */}
+                          {isTrading(coin.id) ? (
+                            <form>
+                              {/* Dropdown menu for selecting available currencies */}
+                              <select
+                                name="fromCoin"
+                                value={tradeData.fromCoin}
+                                onChange={handleInputChange}
+                              >
+                                {Object.keys(testUser.balance).map(
+                                  (currency) =>
+                                    currency !== coin.id && (
+                                      <option key={currency} value={currency}>
+                                        {currency}
+                                      </option>
+                                    )
                                 )}
-                            </div>
+                              </select>
 
-                            {/* Calculate the amount that the available balance would buy */}
-                            <div>
-                              {coin.name} Amount:
-                              {calculateAmount(
-                                tradeData.fromCoin,
-                                coin,
-                                tradeData.fromCoinAmount
-                              )}
-                            </div>
+                              {/* Display the available balance */}
+                              <div>
+                                Available Balance:
+                                {testUser.balance[tradeData.fromCoin] &&
+                                  addCommasToThousands(
+                                    testUser.balance[tradeData.fromCoin]
+                                  )}
+                              </div>
 
-                            {/* Input field for the trade amount */}
-                            <input
-                              type="number"
-                              name="fromCoinAmount"
-                              value={tradeData.fromCoinAmount}
-                              onChange={handleInputChange}
-                              placeholder="Trade amount"
-                            />
-                            <button
-                              type="submit"
-                              onClick={(e) => handleTradeSubmit(e, coin.id)}
-                            >
+                              {/* Calculate the amount that the available balance would buy */}
+                              <div>
+                                {coin.name} Amount:
+                                {calculateAmount(
+                                  tradeData.fromCoin,
+                                  coin,
+                                  tradeData.fromCoinAmount
+                                )}
+                              </div>
+
+                              {/* Input field for the trade amount */}
+                              <input
+                                type="number"
+                                name="fromCoinAmount"
+                                value={tradeData.fromCoinAmount}
+                                onChange={handleInputChange}
+                                placeholder="Trade amount"
+                              />
+                              <button
+                                type="submit"
+                                onClick={(e) => handleTradeSubmit(e, coin.id)}
+                              >
+                                Trade
+                              </button>
+                            </form>
+                          ) : (
+                            <button onClick={() => tradeButtonClick(coin.id)}>
                               Trade
                             </button>
-                          </form>
-                        ) : (
-                          <button onClick={() => tradeButtonClick(coin.id)}>
-                            Trade
-                          </button>
-                        )}
-                      </td>
+                          )}
+                        </td>
+                      )}
                     </tr>
                   );
                 })}
