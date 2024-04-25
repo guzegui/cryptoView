@@ -529,6 +529,19 @@
         "litecoin": 10,
         "dogecoin": 10
       }
+    },
+    {
+      "id": "5af1",
+      "username": "qwdqwdqwdqwd",
+      "email": "qwdqwd@qwdqwd.qwd",
+      "password": "Qwdqwdqw1!",
+      "balance": {
+        "dollars": 100000000,
+        "bitcoin": 10,
+        "ethereum": 10,
+        "litecoin": 10,
+        "dogecoin": 10
+      }
     }
   ]
 }
