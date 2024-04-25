@@ -24,15 +24,27 @@ function DashboardPage({
 
     return Object.entries(user.balance).map(([key, value]) => {
       if (key === "dollars") {
-        return [`USD`, value];
+        return [`dollars`, value];
       } else {
         const coin = tableInfo.data.find((element) => element.id === key);
         if (coin) {
           console.log("the coin is " + coin.id);
-          console.log("the value is " + value + " which is of type " + typeof value);
+          console.log(
+            "the value is " + value + " which is of type " + typeof value
+          );
           const coinTimesValue = coin.priceUsd * value;
-          console.log("the product is " +coinTimesValue + "which is of type " + typeof coinTimesValue);
-          console.log("the value is " + coin.priceUsd + " which is of type " + typeof coin.priceUsd);
+          console.log(
+            "the product is " +
+              coinTimesValue +
+              "which is of type " +
+              typeof coinTimesValue
+          );
+          console.log(
+            "the value is " +
+              coin.priceUsd +
+              " which is of type " +
+              typeof coin.priceUsd
+          );
           return [coin.id, coinTimesValue.toString()];
         } else {
           return null; // if data is not found
@@ -46,12 +58,26 @@ function DashboardPage({
   const totalAvailableBalance = () => {
     if (!currencyData) return "";
     return currencyData.reduce((accumulator, [key, value]) => {
-      if (key === "USD") {
-        console.log("Accumulator was " + accumulator + " and value is " + value + " which is of type " + typeof value);
-        return (accumulator + value);
+      if (key === "dollars") {
+        console.log(
+          "Accumulator was " +
+            accumulator +
+            " and value is " +
+            value +
+            " which is of type " +
+            typeof value
+        );
+        return accumulator + value;
       } else {
-        console.log("Accumulator was " + accumulator + " and value is " + value + " which is of type " + typeof value);
-        return (accumulator + parseFloat(value));
+        console.log(
+          "Accumulator was " +
+            accumulator +
+            " and value is " +
+            value +
+            " which is of type " +
+            typeof value
+        );
+        return accumulator + parseFloat(value);
       }
     }, 0);
   };
@@ -63,6 +89,10 @@ function DashboardPage({
   
   
   */
+
+  console.log(
+    Object.entries(user.balance).find((element) => element[0] === "dollars")
+  );
 
   return (
     <div>
@@ -81,9 +111,15 @@ function DashboardPage({
           <div>
             Currencies:
             {currencyData.map(([key, value]) =>
-              key !== "USD" ? (
+              key !== "dollars" ? (
                 <p key={key}>
-                  {key}: {formatPrice(value)}
+                  {key}:{" "}
+                  {
+                    Object.entries(user.balance).find(
+                      (element) => element[0] === key
+                    )[1]
+                  }{" "}
+                  = (${formatPrice(value)})
                 </p>
               ) : (
                 <p key={key}>
