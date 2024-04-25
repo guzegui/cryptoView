@@ -10,7 +10,7 @@ function HomePage({
   tableInfo,
   previousTableInfo,
   addCommasToThousands,
-  user,
+  user, formatPrice
 }) {
   const { data } = tableInfo;
   const { timestamp } = tableInfo;
@@ -89,25 +89,6 @@ function HomePage({
     }
   };
 
-  function formatPrice(price) {
-    // Separate integer and decimal parts
-    const [integerPart, decimalPart] = price.split(".");
-
-    const formattedIntegerPart = addCommasToThousands(integerPart);
-
-    // Separate first two decimals from the rest
-    const firstTwoDecimals = decimalPart.slice(0, 2);
-    const restDecimals = decimalPart.slice(2);
-
-    // Return formatted price parts as React elements, with reference to custom CSS classes in index.css
-    return (
-      <span>
-        <span className="integer">{formattedIntegerPart}</span>.
-        <span className="decimal">{firstTwoDecimals}</span>
-        <span className="small-decimal">{restDecimals}</span>
-      </span>
-    );
-  }
 
   function tradeButtonClick(coinId) {
     setTradeFormVisible({ isTrading: true, id: coinId });

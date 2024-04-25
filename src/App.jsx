@@ -24,15 +24,13 @@ function App() {
     JSON.parse(localStorage.getItem("loggedInUser"))
   );
   const navigate = useNavigate();
+  const fetchData = (coins) => {
+    axios
+      .get(testApi)
+      .then((response) => {
+        const data = response.data;
 
-  // Crypto data from API
-  useEffect(() => {
-    const fetchData = () => {
-      axios
-        .get(testApi)
-        .then((response) => {
-          const data = response.data;
-
+        if (coins === undefined) {
           // Extract the id and price from tableInfo previous state
           const prevPrices = data.data.map((element) => ({
             id: element.id,
@@ -40,14 +38,16 @@ function App() {
           }));
           setPreviousTableInfo(prevPrices);
           setTableInfo(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    };
-
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+  // Crypto data from API
+  useEffect(() => {
     // Fetch data initially
-    fetchData();
+    fetchData(undefined);
 
     // Set interval id to 1 second
     const intervalId = setInterval(fetchData, 1000);
@@ -128,6 +128,26 @@ MAYBE, user needs to be handled in app.jsx
     return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  function formatPrice(price) {
+    // Separate integer and decimal parts
+    const [integerPart, decimalPart] = price.split(".");
+
+    const formattedIntegerPart = addCommasToThousands(integerPart);
+
+    // Separate first two decimals from the rest
+    const firstTwoDecimals = decimalPart.slice(0, 2);
+    const restDecimals = decimalPart.slice(2);
+
+    // Return formatted price parts as React elements, with reference to custom CSS classes in index.css
+    return (
+      <span>
+        <span className="integer">{formattedIntegerPart}</span>.
+        <span className="decimal">{firstTwoDecimals}</span>
+        <span className="small-decimal">{restDecimals}</span>
+      </span>
+    );
+  }
+
   return (
     <div>
       <Navbar
@@ -143,7 +163,7 @@ MAYBE, user needs to be handled in app.jsx
               tableInfo={tableInfo}
               previousTableInfo={previousTableInfo}
               addCommasToThousands={addCommasToThousands}
-              user={user}
+              user={user} formatPrice={formatPrice}
             ></HomePage>
           }
         />
@@ -155,12 +175,15 @@ MAYBE, user needs to be handled in app.jsx
               user={user}
               setUser={setUser}
               addCommasToThousands={addCommasToThousands}
+              tableInfo={tableInfo} formatPrice={formatPrice}
             ></DashboardPage>
           }
         />
         <Route
           path="/signup"
-          element={<SignUpPage handleLogin={handleLogin} users={users}></SignUpPage>}
+          element={
+            <SignUpPage handleLogin={handleLogin} users={users}></SignUpPage>
+          }
         />
       </Routes>
     </div>
