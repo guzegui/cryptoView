@@ -7,8 +7,8 @@ import HomePage from "./pages/HomePage";
 import NewsPage from "./pages/NewsPage";
 import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
+import CryptoData from "./components/CryptoData";
 
-const testApi = "https://api.coincap.io/v2/assets";
 
 const jsonServer = "http://localhost:3000/users";
 
@@ -24,37 +24,6 @@ function App() {
     JSON.parse(localStorage.getItem("loggedInUser"))
   );
   const navigate = useNavigate();
-  const fetchData = (coins) => {
-    axios
-      .get(testApi)
-      .then((response) => {
-        const data = response.data;
-
-        if (coins === undefined) {
-          // Extract the id and price from tableInfo previous state
-          const prevPrices = data.data.map((element) => ({
-            id: element.id,
-            priceUsd: element.priceUsd,
-          }));
-          setPreviousTableInfo(prevPrices);
-          setTableInfo(data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-  // Crypto data from API
-  useEffect(() => {
-    // Fetch data initially
-    fetchData(undefined);
-
-    // Set interval id to 1 second
-    const intervalId = setInterval(fetchData, 1000);
-
-    // Clear interval on unmount
-    return () => clearInterval(intervalId);
-  }, []);
 
   // Load users from jsonserver
   useEffect(() => {
@@ -163,7 +132,8 @@ MAYBE, user needs to be handled in app.jsx
               tableInfo={tableInfo}
               previousTableInfo={previousTableInfo}
               addCommasToThousands={addCommasToThousands}
-              user={user} formatPrice={formatPrice}
+              user={user}
+              formatPrice={formatPrice}
             ></HomePage>
           }
         />
@@ -175,7 +145,8 @@ MAYBE, user needs to be handled in app.jsx
               user={user}
               setUser={setUser}
               addCommasToThousands={addCommasToThousands}
-              tableInfo={tableInfo} formatPrice={formatPrice}
+              tableInfo={tableInfo}
+              formatPrice={formatPrice}
             ></DashboardPage>
           }
         />
@@ -186,6 +157,10 @@ MAYBE, user needs to be handled in app.jsx
           }
         />
       </Routes>
+      <CryptoData
+        setTableInfo={setTableInfo}
+        setPreviousTableInfo={setPreviousTableInfo}
+      />
     </div>
   );
 }
