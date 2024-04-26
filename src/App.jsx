@@ -1,6 +1,7 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import moment from "moment";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
@@ -23,31 +24,78 @@ function App() {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("loggedInUser"))
   );
+  const [changes, setChanges] = useState([]);
   const navigate = useNavigate();
-  const fetchData = (coins) => {
+
+  // Function to compare current data with previous data
+  // Function to compare current data with previous data
+  const findPriceChanges = (currentData) => {
+    const newChanges = [];
+
+    // Check if currentData is undefined or not an object
+    if (!currentData || typeof currentData !== "object") {
+      console.error("Invalid data format:", currentData);
+      return newChanges;
+    }
+
+    const coinData = currentData.data || []; // Extract coin data from currentData
+    const currentTimestamp = currentData.timestamp || Date.now(); // Extract timestamp from currentData or use current time
+
+    if (tableInfo == {}) {
+      // If previous data is empty, return empty changes array
+      return newChanges;
+    }
+
+    // Convert coin data object into an array
+    const currentDataArray = coinData.map((coin) => ({
+      id: coin.id,
+      priceUsd: coin.priceUsd,
+    }));
+
+    currentDataArray.forEach((currentCoin) => {
+      const previousCoin = tableInfo.data.find(
+        (element) => currentCoin.id === element.id
+      );
+      if (previousCoin && previousCoin.priceUsd !== currentCoin.priceUsd) {
+        const priceDiff =
+          parseFloat(currentCoin.priceUsd) - parseFloat(previousCoin.priceUsd);
+        const timestamp = moment(currentTimestamp).format("HH:mm:ss"); // Format timestamp to include only hour, minute, and second
+        newChanges.push({ id: currentCoin.id, priceDiff, timestamp });
+      }
+    });
+
+    // time difference is between 3 and 5 minutes in dev tools but console.log every 2 seconds
+
+    return newChanges;
+  };
+
+  const fetchData = () => {
     axios
       .get(testApi)
       .then((response) => {
         const data = response.data;
 
-        if (coins === undefined) {
-          // Extract the id and price from tableInfo previous state
-          const prevPrices = data.data.map((element) => ({
-            id: element.id,
-            priceUsd: element.priceUsd,
-          }));
-          setPreviousTableInfo(prevPrices);
-          setTableInfo(data);
+        // Compare current data with previous data
+        const newChanges = findPriceChanges(data);
+
+        // Update current data
+        setTableInfo(data);
+
+        // Update changes state only if there are changes
+        if (newChanges.length > 0) {
+          setChanges((prevChanges) => [...prevChanges, ...newChanges]);
+          console.log("Changes detected:", newChanges);
         }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   };
+
   // Crypto data from API
   useEffect(() => {
     // Fetch data initially
-    fetchData(undefined);
+    fetchData();
 
     // Set interval id to 1 second
     const intervalId = setInterval(fetchData, 1000);
@@ -163,7 +211,8 @@ MAYBE, user needs to be handled in app.jsx
               tableInfo={tableInfo}
               previousTableInfo={previousTableInfo}
               addCommasToThousands={addCommasToThousands}
-              user={user} formatPrice={formatPrice}
+              user={user}
+              formatPrice={formatPrice}
             ></HomePage>
           }
         />
@@ -175,7 +224,8 @@ MAYBE, user needs to be handled in app.jsx
               user={user}
               setUser={setUser}
               addCommasToThousands={addCommasToThousands}
-              tableInfo={tableInfo} formatPrice={formatPrice}
+              tableInfo={tableInfo}
+              formatPrice={formatPrice}
             ></DashboardPage>
           }
         />
