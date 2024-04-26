@@ -10,7 +10,8 @@ function HomePage({
   tableInfo,
   previousTableInfo,
   addCommasToThousands,
-  user, formatPrice
+  user,
+  formatPrice,
 }) {
   const { data } = tableInfo;
   const { timestamp } = tableInfo;
@@ -88,7 +89,6 @@ function HomePage({
       }
     }
   };
-
 
   function tradeButtonClick(coinId) {
     setTradeFormVisible({ isTrading: true, id: coinId });
@@ -275,6 +275,7 @@ function HomePage({
                 <th>Price in USD</th>
                 <th>Volume</th>
                 <th>% Change in 24h</th>
+                <th>Last Price Change in USD</th>
                 {loggedInUser && <th>Actions</th>}
               </tr>
             </thead>
@@ -304,8 +305,9 @@ function HomePage({
                             : "text-success"
                         }
                       >
-                        {parseFloat(coin.changePercent24Hr).toFixed(2)}
+                        {parseFloat(coin.changePercent24Hr).toFixed(2)} %
                       </td>
+                      <td>check it</td>
                       {loggedInUser && (
                         <td>
                           {/* Render trade button or trade form */}
