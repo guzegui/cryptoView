@@ -29,7 +29,7 @@ function App() {
 
   // Function to compare current data with previous data
   // Function to compare current data with previous data
-  const findPriceChanges = (currentData) => {
+  const findPriceChanges = (currentData, tableInfo) => {
     const newChanges = [];
 
     // Check if currentData is undefined or not an object
@@ -38,15 +38,24 @@ function App() {
       return newChanges;
     }
 
-    const coinData = currentData.data || []; // Extract coin data from currentData
-    const currentTimestamp = currentData.timestamp || Date.now(); // Extract timestamp from currentData or use current time
-
-    if (tableInfo == {}) {
+    if (Object.keys(tableInfo).length === 0) {
       // If previous data is empty, return empty changes array
-      return newChanges;
+      return [];
     }
+    const coinData = currentData.data;
+    const newTimestamp = moment(currentData.timestamp);
+    const formattedNewTimestamp = moment(currentData.timestamp).format(
+      "HH:mm:ss"
+    );
+    const prevTimestamp = moment(tableInfo.timestamp);
+    const diffTime = newTimestamp.diff(prevTimestamp, "seconds");
+
+    /*
+.format("HH:mm:ss")
+*/
 
     // Convert coin data object into an array
+
     const currentDataArray = coinData.map((coin) => ({
       id: coin.id,
       priceUsd: coin.priceUsd,
@@ -59,8 +68,13 @@ function App() {
       if (previousCoin && previousCoin.priceUsd !== currentCoin.priceUsd) {
         const priceDiff =
           parseFloat(currentCoin.priceUsd) - parseFloat(previousCoin.priceUsd);
-        const timestamp = moment(currentTimestamp).format("HH:mm:ss"); // Format timestamp to include only hour, minute, and second
-        newChanges.push({ id: currentCoin.id, priceDiff, timestamp });
+
+        newChanges.push({
+          id: currentCoin.id,
+          priceDiff,
+          formattedNewTimestamp,
+          diffTime,
+        });
       }
     });
 
@@ -69,22 +83,53 @@ function App() {
     return newChanges;
   };
 
+  const addChangesToTableInfo = (changes, tableInfo) => {
+    // Iterate over each change
+    changes.forEach((change) => {
+      // Find the index of the coin in the tableInfo data array
+      const index = tableInfo.data.findIndex((coin) => coin.id === change.id);
+
+      // If the coin is found in the tableInfo data array
+      if (index !== -1) {
+        // Remove the id from the change object
+        const { id, ...changeInfo } = change;
+
+        // Update the corresponding entry in the tableInfo data array
+        tableInfo.data[index] = {
+          ...tableInfo.data[index], // Keep existing coin info
+          ...changeInfo, // Add new info from the change
+        };
+      }
+    });
+
+    // Return the updated tableInfo
+    return tableInfo;
+  };
+
   const fetchData = () => {
     axios
       .get(testApi)
       .then((response) => {
         const data = response.data;
 
-        // Compare current data with previous data
-        const newChanges = findPriceChanges(data);
+        // If tableInfo is empty, set it to the data from the API response
+        if (Object.keys(tableInfo).length === 0) {
+          setTableInfo(data);
+        } else {
+          // Compare current data with previous data
+          const newChanges = findPriceChanges(data, tableInfo);
 
-        // Update current data
-        setTableInfo(data);
+          // Update current data if there are changes
+          if (newChanges.length > 0) {
+            setTableInfo((prevTableInfo) => {
+              const updatedTableInfo = addChangesToTableInfo(newChanges, {
+                ...prevTableInfo,
+              });
+              return updatedTableInfo;
+            });
+          }
 
-        // Update changes state only if there are changes
-        if (newChanges.length > 0) {
-          setChanges((prevChanges) => [...prevChanges, ...newChanges]);
-          console.log("Changes detected:", newChanges);
+          console.log(tableInfo.data);
         }
       })
       .catch((error) => {
@@ -102,7 +147,7 @@ function App() {
 
     // Clear interval on unmount
     return () => clearInterval(intervalId);
-  }, []);
+  }, [tableInfo]);
 
   // Load users from jsonserver
   useEffect(() => {
