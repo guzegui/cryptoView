@@ -3,6 +3,9 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import SortIcon from "@mui/icons-material/Sort";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 const jsonServer = "http://localhost:3000/users";
 
@@ -238,6 +241,43 @@ function HomePage({
     navigate(`/`);
   }
 
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+
+  const handleClick = (key) => {
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "ascending"
+        ? "descending"
+        : "ascending";
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = () => {
+    if (sortConfig.key) {
+      const sorted = data.sort((a, b) => {
+        switch (sortConfig.key) {
+          case "rank":
+          case "volume":
+            return sortConfig.direction === "ascending"
+              ? a[sortConfig.key] - b[sortConfig.key]
+              : b[sortConfig.key] - a[sortConfig.key];
+          case "priceUsd":
+          case "changePercent24Hr":
+          case "priceDiff":
+            return sortConfig.direction === "ascending"
+              ? parseFloat(a[sortConfig.key]) - parseFloat(b[sortConfig.key])
+              : parseFloat(b[sortConfig.key]) - parseFloat(a[sortConfig.key]);
+          default:
+            return 0;
+        }
+      });
+      return sorted;
+    }
+    return data;
+  };
+
   //   useEffect(() => {
 
   //     setTradeData({
@@ -270,18 +310,78 @@ function HomePage({
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>Rank</th>
-                <th>Symbol</th>
-                <th>Price in USD</th>
-                <th>Volume</th>
-                <th>% Change in 24h</th>
-                {data[0].priceDiff && <th>Last Price Change in USD</th>}
+                <th onClick={() => handleClick("rank")}>
+                  Rank
+                  {sortConfig.key === "rank" &&
+                    sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
+                  {sortConfig.key === "rank" &&
+                    sortConfig.direction === "descending" && (
+                      <ArrowDownwardIcon />
+                    )}
+                  {sortConfig.key !== "rank" && <SortIcon />}
+                </th>
+                <th onClick={() => handleClick("symbol")}>
+                  Symbol
+                  {sortConfig.key === "symbol" &&
+                    sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
+                  {sortConfig.key === "symbol" &&
+                    sortConfig.direction === "descending" && (
+                      <ArrowDownwardIcon />
+                    )}
+                  {sortConfig.key !== "symbol" && <SortIcon />}
+                </th>
+                <th onClick={() => handleClick("priceUsd")}>
+                  Price in USD
+                  {sortConfig.key === "priceUsd" &&
+                    sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
+                  {sortConfig.key === "priceUsd" &&
+                    sortConfig.direction === "descending" && (
+                      <ArrowDownwardIcon />
+                    )}
+                  {sortConfig.key !== "priceUsd" && <SortIcon />}
+                </th>
+                <th onClick={() => handleClick("volume")}>
+                  Volume
+                  {sortConfig.key === "volume" &&
+                    sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
+                  {sortConfig.key === "volume" &&
+                    sortConfig.direction === "descending" && (
+                      <ArrowDownwardIcon />
+                    )}
+                  {sortConfig.key !== "volume" && <SortIcon />}
+                </th>
+                <th onClick={() => handleClick("changePercent24Hr")}>
+                  % Change in 24h
+                  {sortConfig.key === "changePercent24Hr" &&
+                    sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
+                  {sortConfig.key === "changePercent24Hr" &&
+                    sortConfig.direction === "descending" && (
+                      <ArrowDownwardIcon />
+                    )}
+                  {sortConfig.key !== "changePercent24Hr" && <SortIcon />}
+                </th>
+
+                {data[0].priceDiff && (
+                  <th onClick={() => handleClick("priceDiff")}>
+                    Last Price Change in USD
+                    {sortConfig.key === "priceDiff" &&
+                      sortConfig.direction === "ascending" && (
+                        <ArrowUpwardIcon />
+                      )}
+                    {sortConfig.key === "priceDiff" &&
+                      sortConfig.direction === "descending" && (
+                        <ArrowDownwardIcon />
+                      )}
+                    {sortConfig.key !== "priceDiff" && <SortIcon />}
+                  </th>
+                )}
+
                 {loggedInUser && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
-              {data &&
-                data.map((coin) => {
+              {sortedData() &&
+                sortedData().map((coin) => {
                   return (
                     <tr key={coin.id}>
                       <td>{coin.rank}</td>
@@ -307,11 +407,15 @@ function HomePage({
                       >
                         {parseFloat(coin.changePercent24Hr).toFixed(2)} %
                       </td>
-                      {coin.priceDiff && <td className={
-                          coin.priceDiff < 0
-                            ? "text-danger"
-                            : "text-success"
-                        }>{formatPrice(coin.priceDiff.toString())}</td> }
+                      {coin.priceDiff && (
+                        <td
+                          className={
+                            coin.priceDiff < 0 ? "text-danger" : "text-success"
+                          }
+                        >
+                          {formatPrice(coin.priceDiff.toString())}
+                        </td>
+                      )}
                       {loggedInUser && (
                         <td>
                           {/* Render trade button or trade form */}
