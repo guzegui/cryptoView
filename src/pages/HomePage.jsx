@@ -275,7 +275,7 @@ function HomePage({
                 <th>Price in USD</th>
                 <th>Volume</th>
                 <th>% Change in 24h</th>
-                <th>Last Price Change in USD</th>
+                {data[0].priceDiff && <th>Last Price Change in USD</th>}
                 {loggedInUser && <th>Actions</th>}
               </tr>
             </thead>
@@ -307,7 +307,11 @@ function HomePage({
                       >
                         {parseFloat(coin.changePercent24Hr).toFixed(2)} %
                       </td>
-                      <td>check it</td>
+                      {coin.priceDiff && <td className={
+                          coin.priceDiff < 0
+                            ? "text-danger"
+                            : "text-success"
+                        }>{formatPrice(coin.priceDiff.toString())}</td> }
                       {loggedInUser && (
                         <td>
                           {/* Render trade button or trade form */}

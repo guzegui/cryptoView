@@ -83,7 +83,7 @@ function App() {
     return newChanges;
   };
 
-  const addChangesToTableInfo = (changes, tableInfo) => {
+  const addChangesToTableInfo = (changes, tableInfo, timestamp) => {
     // Iterate over each change
     changes.forEach((change) => {
       // Find the index of the coin in the tableInfo data array
@@ -101,6 +101,9 @@ function App() {
         };
       }
     });
+
+    // Update the timestamp in tableInfo
+    tableInfo.timestamp = timestamp;
 
     // Return the updated tableInfo
     return tableInfo;
@@ -122,14 +125,18 @@ function App() {
           // Update current data if there are changes
           if (newChanges.length > 0) {
             setTableInfo((prevTableInfo) => {
-              const updatedTableInfo = addChangesToTableInfo(newChanges, {
-                ...prevTableInfo,
-              });
+              const updatedTableInfo = addChangesToTableInfo(
+                newChanges,
+                {
+                  ...prevTableInfo,
+                },
+                data.timestamp
+              );
               return updatedTableInfo;
             });
+          } else {
+            setTableInfo(data);
           }
-
-          console.log(tableInfo.data);
         }
       })
       .catch((error) => {
