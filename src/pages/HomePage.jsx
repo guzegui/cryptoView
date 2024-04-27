@@ -14,7 +14,7 @@ function HomePage({
   previousTableInfo,
   addCommasToThousands,
   user,
-  formatPrice,
+  formatPrice, capitalizeFirstLetter
 }) {
   const { data } = tableInfo;
   const { timestamp } = tableInfo;
@@ -259,12 +259,13 @@ function HomePage({
       const sorted = data.sort((a, b) => {
         switch (sortConfig.key) {
           case "rank":
-          case "volume":
             return sortConfig.direction === "ascending"
               ? a[sortConfig.key] - b[sortConfig.key]
               : b[sortConfig.key] - a[sortConfig.key];
+          case "id":
           case "priceUsd":
           case "changePercent24Hr":
+          case "volumeUsd24Hr":
           case "priceDiff":
             return sortConfig.direction === "ascending"
               ? parseFloat(a[sortConfig.key]) - parseFloat(b[sortConfig.key])
@@ -320,15 +321,15 @@ function HomePage({
                     )}
                   {sortConfig.key !== "rank" && <SortIcon />}
                 </th>
-                <th onClick={() => handleClick("symbol")}>
+                <th onClick={() => handleClick("id")}>
                   Symbol
-                  {sortConfig.key === "symbol" &&
+                  {sortConfig.key === "id" &&
                     sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
-                  {sortConfig.key === "symbol" &&
+                  {sortConfig.key === "id" &&
                     sortConfig.direction === "descending" && (
                       <ArrowDownwardIcon />
                     )}
-                  {sortConfig.key !== "symbol" && <SortIcon />}
+                  {sortConfig.key !== "id" && <SortIcon />}
                 </th>
                 <th onClick={() => handleClick("priceUsd")}>
                   Price in USD
@@ -340,15 +341,15 @@ function HomePage({
                     )}
                   {sortConfig.key !== "priceUsd" && <SortIcon />}
                 </th>
-                <th onClick={() => handleClick("volume")}>
+                <th onClick={() => handleClick("volumeUsd24Hr")}>
                   Volume
-                  {sortConfig.key === "volume" &&
+                  {sortConfig.key === "volumeUsd24Hr" &&
                     sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
-                  {sortConfig.key === "volume" &&
+                  {sortConfig.key === "volumeUsd24Hr" &&
                     sortConfig.direction === "descending" && (
                       <ArrowDownwardIcon />
                     )}
-                  {sortConfig.key !== "volume" && <SortIcon />}
+                  {sortConfig.key !== "volumeUsd24Hr" && <SortIcon />}
                 </th>
                 <th onClick={() => handleClick("changePercent24Hr")}>
                   % Change in 24h
@@ -361,20 +362,16 @@ function HomePage({
                   {sortConfig.key !== "changePercent24Hr" && <SortIcon />}
                 </th>
 
-                {data[0].priceDiff && (
-                  <th onClick={() => handleClick("priceDiff")}>
-                    Last Price Change in USD
-                    {sortConfig.key === "priceDiff" &&
-                      sortConfig.direction === "ascending" && (
-                        <ArrowUpwardIcon />
-                      )}
-                    {sortConfig.key === "priceDiff" &&
-                      sortConfig.direction === "descending" && (
-                        <ArrowDownwardIcon />
-                      )}
-                    {sortConfig.key !== "priceDiff" && <SortIcon />}
-                  </th>
-                )}
+                <th onClick={() => handleClick("priceDiff")}>
+                  Last Price Change in USD
+                  {sortConfig.key === "priceDiff" &&
+                    sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
+                  {sortConfig.key === "priceDiff" &&
+                    sortConfig.direction === "descending" && (
+                      <ArrowDownwardIcon />
+                    )}
+                  {sortConfig.key !== "priceDiff" && <SortIcon />}
+                </th>
 
                 {loggedInUser && <th>Actions</th>}
               </tr>
@@ -391,7 +388,7 @@ function HomePage({
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          {coin.symbol}
+                          {coin.symbol} ({capitalizeFirstLetter(coin.id)})
                         </a>
                       </td>
                       <td className="price">{formatPrice(coin.priceUsd)}</td>
@@ -407,7 +404,9 @@ function HomePage({
                       >
                         {parseFloat(coin.changePercent24Hr).toFixed(2)} %
                       </td>
-                      {coin.priceDiff && (
+                      {!coin.priceDiff ? (
+                        <td>N/A</td>
+                      ) : (
                         <td
                           className={
                             coin.priceDiff < 0 ? "text-danger" : "text-success"

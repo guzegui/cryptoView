@@ -83,6 +83,10 @@ function App() {
     return newChanges;
   };
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   const addChangesToTableInfo = (changes, tableInfo, timestamp) => {
     // Iterate over each change
     changes.forEach((change) => {
@@ -265,6 +269,7 @@ MAYBE, user needs to be handled in app.jsx
               addCommasToThousands={addCommasToThousands}
               user={user}
               formatPrice={formatPrice}
+              capitalizeFirstLetter={capitalizeFirstLetter}
             ></HomePage>
           }
         />
@@ -278,6 +283,7 @@ MAYBE, user needs to be handled in app.jsx
               addCommasToThousands={addCommasToThousands}
               tableInfo={tableInfo}
               formatPrice={formatPrice}
+              capitalizeFirstLetter={capitalizeFirstLetter}
             ></DashboardPage>
           }
         />

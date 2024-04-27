@@ -8,7 +8,7 @@ function DashboardPage({
   setUser,
   addCommasToThousands,
   tableInfo,
-  formatPrice,
+  formatPrice, capitalizeFirstLetter
 }) {
   const id = localStorage.getItem("loggedInUser").slice(7, 11);
 
@@ -113,7 +113,7 @@ function DashboardPage({
             {currencyData.map(([key, value]) =>
               key !== "dollars" ? (
                 <p key={key}>
-                  {key}:{" "}
+                  {capitalizeFirstLetter(key)}:{" "}
                   {
                     Object.entries(user.balance).find(
                       (element) => element[0] === key
@@ -123,7 +123,7 @@ function DashboardPage({
                 </p>
               ) : (
                 <p key={key}>
-                  {key}: ${addCommasToThousands(value)}
+                  {capitalizeFirstLetter(key)}: ${addCommasToThousands(value)}
                 </p>
               )
             )}
