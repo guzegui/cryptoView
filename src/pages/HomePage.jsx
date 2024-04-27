@@ -14,7 +14,8 @@ function HomePage({
   previousTableInfo,
   addCommasToThousands,
   user,
-  formatPrice, capitalizeFirstLetter
+  formatPrice,
+  capitalizeFirstLetter,
 }) {
   const { data } = tableInfo;
   const { timestamp } = tableInfo;
@@ -263,6 +264,9 @@ function HomePage({
               ? a[sortConfig.key] - b[sortConfig.key]
               : b[sortConfig.key] - a[sortConfig.key];
           case "id":
+            return sortConfig.direction === "ascending"
+              ? a[sortConfig.key].localeCompare(b[sortConfig.key])
+              : b[sortConfig.key].localeCompare(a[sortConfig.key]);
           case "priceUsd":
           case "changePercent24Hr":
           case "volumeUsd24Hr":
