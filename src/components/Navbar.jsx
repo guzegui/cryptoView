@@ -59,7 +59,7 @@ function Navbar({ handleLogOut, users, handleLogin }) {
         </a>
 
         <a className="navbar-brand" href="/">
-          Home
+          Ticker
         </a>
         <a className="navbar-brand" href="/news">
           News
