@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const jsonServer = "http://localhost:3000/users";
 
@@ -110,7 +112,7 @@ function SignUpPage({ handleLogin, users }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form-container" onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="email">Email:</label>
         <input
@@ -134,17 +136,22 @@ function SignUpPage({ handleLogin, users }) {
       </div>
       <div className="form-group">
         <label htmlFor="password">Password:</label>
-        <input
-          type={showPassword ? "text" : "password"}
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-        <button type="button" onClick={handleTogglePassword}>
-          {showPassword ? "Hide" : "Show"} Password
-        </button>
+        <div className="password-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+          />
+          {showPassword ? (
+            <VisibilityIcon onClick={handleTogglePassword} />
+          ) : (
+            <VisibilityOffIcon onClick={handleTogglePassword} />
+          )}
+        </div>
       </div>
+
       <button type="submit">Submit</button>
     </form>
   );

@@ -8,7 +8,8 @@ function DashboardPage({
   setUser,
   addCommasToThousands,
   tableInfo,
-  formatPrice, capitalizeFirstLetter
+  formatPrice,
+  capitalizeFirstLetter,
 }) {
   const id = localStorage.getItem("loggedInUser").slice(7, 11);
 
@@ -95,38 +96,75 @@ function DashboardPage({
   );
 
   return (
-    <div>
-      {!user || !user.balance || !tableInfo.data ? (
+    <div className="dashboard-container">
+      {!user || !user.balance || !currencyData ? (
         <div>Loading...</div>
       ) : (
-        <div>
-          <p>Id: {user.id}</p>
-          <p>Username: {user.username}</p>
-          <p>Email: {user.email}</p>
-          <p>Password: {user.password}</p>
-          <p>
-            Total Balance: $
-            {addCommasToThousands(totalAvailableBalance().toFixed(2))}{" "}
-          </p>
-          <div>
-            Currencies:
-            {currencyData.map(([key, value]) =>
-              key !== "dollars" ? (
-                <p key={key}>
-                  {capitalizeFirstLetter(key)}:{" "}
-                  {
-                    Object.entries(user.balance).find(
-                      (element) => element[0] === key
-                    )[1]
-                  }{" "}
-                  = (${formatPrice(value)})
-                </p>
-              ) : (
-                <p key={key}>
-                  {capitalizeFirstLetter(key)}: ${addCommasToThousands(value)}
-                </p>
-              )
-            )}
+        <div className="dashboard-content">
+          <h1 className="dashboard-title">
+            🚀 Welcome to Your Crypto Dashboard 🌟
+          </h1>
+          <hr className="dashboard-divider" />
+          <div className="dashboard-panels">
+            <div className="panel">
+              <div className="panel-icon">🤓</div>
+              <div className="panel-content">
+                <h2 className="panel-title">User Information</h2>
+                <div className="info-list">
+                  <div className="info-item">
+                    <span className="info-label">🆔 ID:</span>
+                    <span className="info-value">{user.id}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">👤 Username:</span>
+                    <span className="info-value">{user.username}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">📧 Email:</span>
+                    <span className="info-value">{user.email}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">🔒 Password:</span>
+                    <span className="info-value">{user.password}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">💰 Total Balance:</span>
+                    <span className="info-value">
+                      $
+                      {addCommasToThousands(totalAvailableBalance().toFixed(2))}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="panel">
+              <div className="panel-icon">📈</div>
+              <div className="panel-content">
+                <h2 className="panel-title">Currencies</h2>
+                <div className="currency-list">
+  {currencyData.map(([key, value]) => (
+    <div key={key} className="currency-item">
+      <span className="currency-label">
+        {capitalizeFirstLetter(key)}:
+      </span>
+      <span className="currency-value">
+        {key !== "dollars" ? (
+          <>
+            {Object.entries(user.balance).find(
+              (element) => element[0] === key
+            )[1]} = (
+            {formatPrice(value)})
+          </>
+        ) : (
+          `$${addCommasToThousands(value)}`
+        )}
+      </span>
+    </div>
+  ))}
+</div>
+
+              </div>
+            </div>
           </div>
         </div>
       )}
