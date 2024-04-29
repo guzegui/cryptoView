@@ -39,9 +39,18 @@ function Navbar({  handleLogOut, users, handleLogin }) {
     handleLogin(undefined, user);
   };
 
+
+  
+  // navbar navbar-default navbar-static-top
+  
   return (
-    <nav className="navbar navbar-dark bg-primary mb-3">
-      <div className="container">
+    <nav className="navbar navbar-dark bg-dark mb-3">
+      <div className="container-fluid" style={{ flex: '' }}>
+      
+      <a className="navbar-brand" href="/">
+  <img className="logo" src="/public/cryptoBackground.png" alt="logo" />
+</a>
+      
         <a className="navbar-brand" href="/">
           Home
         </a>
@@ -50,13 +59,15 @@ function Navbar({  handleLogOut, users, handleLogin }) {
         </a>
 
         {!localStorage.getItem("loggedInUser") ? (
-          <div>
+          <><a className="navbar-brand">
             <div className="dropdown">
               <button
                 className="btn btn-secondary dropdown-toggle"
                 type="button"
                 id="dropdownMenuButton"
                 onClick={toggleDropdown}
+                style={{ backgroundColor: 'transparent', border: 'none', fontSize: '20px' }} // Set font size to 16px
+
               >
                 Login
               </button>
@@ -73,8 +84,7 @@ function Navbar({  handleLogOut, users, handleLogin }) {
                       id="usernameOrEmail"
                       name="usernameOrEmail"
                       value={loginFormData.usernameOrEmail}
-                      onChange={handleInputChange}
-                    />
+                      onChange={handleInputChange} />
                   </div>
                   <div className="form-group">
                     <label htmlFor="password">Password</label>
@@ -84,19 +94,17 @@ function Navbar({  handleLogOut, users, handleLogin }) {
                       id="password"
                       name="password"
                       value={loginFormData.password}
-                      onChange={handleInputChange}
-                    />
+                      onChange={handleInputChange} />
                   </div>
                   <button type="submit" className="btn btn-primary" onClick={() => handleLoginSubmit}>
                     Sign in
                   </button>
                 </form>
               </div>
-              <a className="navbar-brand" href="/signup">
-                Sign Up
-              </a>
             </div>
-          </div>
+          </a><a className="navbar-brand" href="/signup">
+              Sign Up
+            </a></>
         ) : (
           <div>
             <a className="navbar-brand" href="/dashboard">
