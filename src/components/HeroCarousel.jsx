@@ -1,42 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
+import Carousel from "react-bootstrap/Carousel";
 
 function HeroCarousel() {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  // Define a function to handle image load
+  const handleImageLoad = () => {
+    setImagesLoaded(true);
+  };
+
+  const [index, setIndex] = useState(0);
+
+  const handleSelect = (selectedIndex) => {
+    setIndex(selectedIndex);
+  };
+
   return (
     <div className="container">
       <h2>Carousel Example</h2>
-      <div id="myCarousel" className="carousel slide" data-ride="carousel">
-        {/* Indicators */}
-        <ol className="carousel-indicators">
-          <li data-target="#myCarousel" data-slide-to="0" className="active"></li>
-          <li data-target="#myCarousel" data-slide-to="1"></li>
-          <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>
-
-        {/* Wrapper for slides */}
-        <div className="carousel-inner">
-          <div className="item active">
-            <img src="../../public/carousel-imgs/crypto_logos.jpg" alt="Cryptocurrency 1" style={{ width: "100%" }} />
-          </div>
-
-          <div className="item">
-            <img src="../../public/carousel-imgs/crypto-graph.jpg" alt="Cryptocurrency 2" style={{ width: "100%" }} />
-          </div>
-
-          <div className="item">
-            <img src="../../public/carousel-imgs/crypto-vignettes.jpg" alt="Cryptocurrency 3" style={{ width: "100%" }} />
-          </div>
-        </div>
-
-        {/* Left and right controls */}
-        <a className="left carousel-control" href="#myCarousel" data-slide="prev">
-          <span className="glyphicon glyphicon-chevron-left"></span>
-          <span className="sr-only">Previous</span>
-        </a>
-        <a className="right carousel-control" href="#myCarousel" data-slide="next">
-          <span className="glyphicon glyphicon-chevron-right"></span>
-          <span className="sr-only">Next</span>
-        </a>
-      </div>
+      {!imagesLoaded && <p>Loading...</p>}
+      <Carousel activeIndex={index} onSelect={handleSelect}>
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src="/carousel-imgs/crypto_graph.jpg"
+            alt="First slide"
+            onLoad={handleImageLoad}
+            style={{ display: imagesLoaded ? "block" : "none" }}
+          />
+          <Carousel.Caption>
+            <h3>First slide label</h3>
+            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src="/carousel-imgs/crypto_logos.jpg"
+            alt="Second slide"
+            onLoad={handleImageLoad}
+            style={{ display: imagesLoaded ? "block" : "none" }}
+          />
+          <Carousel.Caption>
+            <h3>Second slide label</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src="/carousel-imgs/crypto_vignettes.jpg"
+            alt="Third slide"
+            onLoad={handleImageLoad}
+            style={{ display: imagesLoaded ? "block" : "none" }}
+          />
+          <Carousel.Caption>
+            <h3>Third slide label</h3>
+            <p>
+              Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+            </p>
+          </Carousel.Caption>
+        </Carousel.Item>
+      </Carousel>
     </div>
   );
 }
