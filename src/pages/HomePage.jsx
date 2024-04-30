@@ -312,6 +312,7 @@ function HomePage({
               coincap.io
             </a>
           </p>
+          {!data[0].priceDiff && <p>Waiting for a price change...</p>}
           <table className="table table-striped">
             <thead>
               <tr>
@@ -366,7 +367,7 @@ function HomePage({
                   {sortConfig.key !== "changePercent24Hr" && <SortIcon />}
                 </th>
 
-                <th onClick={() => handleClick("priceDiff")}>
+                {data[0].priceDiff && <th onClick={() => handleClick("priceDiff")}>
                   Last Price Change in USD
                   {sortConfig.key === "priceDiff" &&
                     sortConfig.direction === "ascending" && <ArrowUpwardIcon />}
@@ -375,7 +376,7 @@ function HomePage({
                       <ArrowDownwardIcon />
                     )}
                   {sortConfig.key !== "priceDiff" && <SortIcon />}
-                </th>
+                </th>}
 
                 {loggedInUser && <th>Actions</th>}
               </tr>
@@ -408,9 +409,7 @@ function HomePage({
                       >
                         {parseFloat(coin.changePercent24Hr).toFixed(2)} %
                       </td>
-                      {!coin.priceDiff ? (
-                        <td>N/A</td>
-                      ) : (
+                      {coin.priceDiff &&
                         <td
                           className={
                             coin.priceDiff < 0 ? "text-danger" : "text-success"
@@ -418,7 +417,7 @@ function HomePage({
                         >
                           {formatPrice(coin.priceDiff.toString())}
                         </td>
-                      )}
+                      }
                       {loggedInUser && (
                         <td>
                           {/* Render trade button or trade form */}

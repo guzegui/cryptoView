@@ -58,7 +58,7 @@ function Navbar({ handleLogOut, users, handleLogin }) {
           <p style={{ margin: 0 }}>🚀cryptoView🚀</p>
         </a>
 
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand" href="/ticker">
           Ticker
         </a>
         <a className="navbar-brand" href="/news">

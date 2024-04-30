@@ -260,11 +260,10 @@ MAYBE, user needs to be handled in app.jsx
         users={users}
         handleLogin={handleLogin}
       />
-      <HeroCarousel />
 
       <Routes>
         <Route
-          path="/"
+          path="/ticker"
           element={
             <HomePage
               tableInfo={tableInfo}
@@ -276,6 +275,7 @@ MAYBE, user needs to be handled in app.jsx
             ></HomePage>
           }
         />
+        <Route path="/" element={<HeroCarousel />} />
         <Route path="/news" element={<NewsPage></NewsPage>} />
         <Route
           path="/dashboard"

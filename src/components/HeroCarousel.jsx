@@ -4,7 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 function HeroCarousel() {
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Define a function to handle image load
+  // When image loads, set state to true
   const handleImageLoad = () => {
     setImagesLoaded(true);
   };
@@ -16,10 +16,9 @@ function HeroCarousel() {
   };
 
   return (
-    <div className="container">
-      <h2>Carousel Example</h2>
+    <div className="carousel-container">
       {!imagesLoaded && <p>Loading...</p>}
-      <Carousel activeIndex={index} onSelect={handleSelect}>
+      <Carousel activeIndex={index} onSelect={handleSelect} data-bs-theme="dark">
         <Carousel.Item>
           <img
             className="d-block w-100"
