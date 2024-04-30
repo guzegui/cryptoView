@@ -9,6 +9,7 @@ import NewsPage from "./pages/NewsPage";
 import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
 import HeroCarousel from "./components/HeroCarousel";
+import Alert from "react-bootstrap/Alert";
 
 const testApi = "https://api.coincap.io/v2/assets";
 
@@ -26,9 +27,10 @@ function App() {
     JSON.parse(localStorage.getItem("loggedInUser"))
   );
   const [changes, setChanges] = useState([]);
+  const [showAlerts, setShowAlerts] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({});
   const navigate = useNavigate();
 
-  // Function to compare current data with previous data
   // Function to compare current data with previous data
   const findPriceChanges = (currentData, tableInfo) => {
     const newChanges = [];
@@ -50,10 +52,6 @@ function App() {
     );
     const prevTimestamp = moment(tableInfo.timestamp);
     const diffTime = newTimestamp.diff(prevTimestamp, "seconds");
-
-    /*
-.format("HH:mm:ss")
-*/
 
     // Convert coin data object into an array
 
@@ -169,30 +167,6 @@ function App() {
     });
   }, []);
 
-  /*
-  // Load logged-in user
-
-  const id = localStorage.getItem("loggedInUser").slice(7, 11);
-
-  useEffect(() => {
-    axios.get(`${jsonServer}/${id}`).then((response) => {
-      const user = response.data;
-      console.log(user);
-      setUser(user);
-    });
-  }, []);
-*/
-
-  /*
-when user is created and logged in in signup, it navigates to HOME page and the user is loaded
-it's available in the dashboard
-when the user goes back to home page, the user disappears
-MAYBE, user needs to be handled in app.jsx
-
-
-
-*/
-
   function handleLogin(formData, user) {
     if (user == undefined) {
       localStorage.setItem("loggedInUser", JSON.stringify(formData));
@@ -253,12 +227,38 @@ MAYBE, user needs to be handled in app.jsx
     );
   }
 
+  const alertMessage = (onClose) => {
+    let messageRendered = "";
+
+    if (alertInfo.section === "navbar") {
+      if (alertInfo.type === "userAndPassword") {
+        messageRendered = "Neither user nor password exist!";
+      } else if (alertInfo.type === "user")
+        messageRendered = "User does not exist!";
+      else if (alertInfo.type === "password")
+        messageRendered = "Incorrect password!";
+    }
+
+    return (
+      <Alert variant="danger" onClose={onClose} dismissible>
+        <Alert.Heading>Error</Alert.Heading>
+        <p>{messageRendered}</p>
+      </Alert>
+    );
+
+    // types are logIn, tradeError, tradeSuccess, signUp
+  };
+
   return (
     <div>
       <Navbar
         handleLogOut={handleLogOut}
         users={users}
         handleLogin={handleLogin}
+        alertMessage={alertMessage}
+        setShowAlerts={setShowAlerts}
+        showAlerts={showAlerts}
+        setAlertInfo={setAlertInfo}
       />
 
       <Routes>
@@ -272,6 +272,9 @@ MAYBE, user needs to be handled in app.jsx
               user={user}
               formatPrice={formatPrice}
               capitalizeFirstLetter={capitalizeFirstLetter}
+              alertMessage={alertMessage}
+              setShowAlerts={setShowAlerts}
+              showAlerts={showAlerts}
             ></HomePage>
           }
         />
@@ -293,7 +296,13 @@ MAYBE, user needs to be handled in app.jsx
         <Route
           path="/signup"
           element={
-            <SignUpPage handleLogin={handleLogin} users={users}></SignUpPage>
+            <SignUpPage
+              handleLogin={handleLogin}
+              users={users}
+              alertMessage={alertMessage}
+              setShowAlerts={setShowAlerts}
+              showAlerts={showAlerts}
+            ></SignUpPage>
           }
         />
       </Routes>
