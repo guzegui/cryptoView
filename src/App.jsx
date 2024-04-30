@@ -228,23 +228,22 @@ function App() {
   }
 
   const alertMessage = (onClose) => {
-    let messageRendered = "";
-
-    if (alertInfo.section === "navbar") {
-      if (alertInfo.type === "userAndPassword") {
-        messageRendered = "Neither user nor password exist!";
-      } else if (alertInfo.type === "user")
-        messageRendered = "User does not exist!";
-      else if (alertInfo.type === "password")
-        messageRendered = "Incorrect password!";
+    if (alertInfo.type === "tickerBalance") {
+      let messageRendered = "Insufficient balance!";
+      return (
+        <Alert variant="warning" onClose={onClose} dismissible>
+          <Alert.Heading>Error</Alert.Heading>
+          <p>{messageRendered}</p>
+        </Alert>
+      );
+    } else {
+      return (
+        <Alert variant="danger" onClose={onClose} dismissible>
+          <Alert.Heading>Error</Alert.Heading>
+          <p>{alertInfo.type}</p>
+        </Alert>
+      );
     }
-
-    return (
-      <Alert variant="danger" onClose={onClose} dismissible>
-        <Alert.Heading>Error</Alert.Heading>
-        <p>{messageRendered}</p>
-      </Alert>
-    );
 
     // types are logIn, tradeError, tradeSuccess, signUp
   };
@@ -275,6 +274,7 @@ function App() {
               alertMessage={alertMessage}
               setShowAlerts={setShowAlerts}
               showAlerts={showAlerts}
+              setAlertInfo={setAlertInfo}
             ></HomePage>
           }
         />
@@ -302,6 +302,7 @@ function App() {
               alertMessage={alertMessage}
               setShowAlerts={setShowAlerts}
               showAlerts={showAlerts}
+              setAlertInfo={setAlertInfo}
             ></SignUpPage>
           }
         />

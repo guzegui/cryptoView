@@ -36,7 +36,7 @@ function Navbar({
 
     if (!user) {
       setShowAlerts(true);
-      setAlertInfo({ section: "navbar", type: "user" });
+      setAlertInfo({type: "User does not exist!" });
       setIsDropdownOpen(false);
       return;
     }
@@ -44,7 +44,7 @@ function Navbar({
     // Check if the password is correct
     if (user.password !== loginFormData.password) {
       setShowAlerts(true);
-      setAlertInfo({ section: "navbar", type: "password" });
+      setAlertInfo({ type: "Incorrect password!" });
       setIsDropdownOpen(false);
       return;
     }

@@ -11,7 +11,14 @@ const jsonServer = "http://localhost:3000/users";
 npx json-server --watch db.json --port 3000
 */
 
-function SignUpPage({ handleLogin, users }) {
+function SignUpPage({
+  handleLogin,
+  users,
+  alertMessage,
+  setShowAlerts,
+  showAlerts,
+  setAlertInfo,
+}) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -64,20 +71,20 @@ function SignUpPage({ handleLogin, users }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    let isEverythingOk = false;
-
     // Check validity of password and email
     const validity = regexCheck(formData.email, formData.password);
-    if (validity === "both invalid") {
-      alert(
-        "Invalid email and password! Password should be at least 8 characters long and contain letters, numbers and special characters."
-      );
-    } else if (validity === "invalid email") {
-      alert("Invalid email! ex. example@example.com");
-    } else if (validity === "invalid password") {
-      alert(
-        "Invalid password! It should be at least 8 characters long and contain letters, numbers and special characters"
-      );
+    let type = "";
+    let isEverythingOk = false;
+    if (validity !== "both pass") {
+      if (validity === "both invalid") {
+        type =
+          "Invalid email and password! Password should be at least 8 characters long and contain letters, numbers and special characters.";
+      } else if (validity === "invalid email") {
+        type = "Invalid email! ex. example@example.com";
+      } else if (validity === "invalid password") {
+        type =
+          "Invalid password! It should be at least 8 characters long and contain letters, numbers and special characters";
+      }
     } else {
       // Check if email or username already exists
       const emailExists = users.some((user) => user.email === formData.email);
@@ -87,27 +94,28 @@ function SignUpPage({ handleLogin, users }) {
 
       if (emailExists || usernameExists) {
         if (emailExists && usernameExists) {
-          alert("Email and username already exist!");
+          type = "Email and username already exist!";
         } else if (usernameExists) {
-          alert("Username already exists");
+          type = "Username already exists";
         } else {
-          alert("Email already exists");
+          type = "Email already exists";
         }
-      } else {
-        isEverythingOk = true;
       }
-    }
 
-    if (isEverythingOk) {
-      axios
-        .post(`${jsonServer}`, formData)
-        .then((response) => {
-          handleLogin(response.data, undefined);
-          navigate(`/`);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (isEverythingOk) {
+        axios
+          .post(`${jsonServer}`, formData)
+          .then((response) => {
+            handleLogin(response.data, undefined);
+            navigate(`/ticker`);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        setShowAlerts(true);
+        setAlertInfo({ type: type });
+      }
     }
   };
 

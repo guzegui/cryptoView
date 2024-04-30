@@ -9,6 +9,7 @@ function TickerTable({
   sortConfig,
   handleClick,
   sortedData,
+  testUser,
   loggedInUser,
   isTrading,
   tradeData,
@@ -17,7 +18,12 @@ function TickerTable({
   handleTradeSubmit,
   tradeButtonClick,
   capitalizeFirstLetter,
+  addCommasToThousands,
   formatPrice,
+  alertMessage,
+  setShowAlerts,
+  showAlerts,
+  setAlertInfo,
 }) {
   return (
     <div>
