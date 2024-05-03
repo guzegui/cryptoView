@@ -1,3 +1,7 @@
+body {
+  font-family: "Roboto", sans-serif; /* Use the imported font family */
+}
+
 .integer .decimal {
   font-size: 16px;
 }
@@ -19,6 +23,52 @@
 .logo {
   max-width: auto;
   height: 55px;
+}
+
+.carousel-container h1 {
+  /* animation: slideInLeft 1s ease-out; */
+  animation: bounceIn 1s ease-out;
+  font-family: "Roboto", sans-serif; /* Use your chosen font */
+  font-size: 36px; /* Adjust font size as needed */
+  font-weight: bold; /* Make the text bold */
+  color: #fff; /* Set text color */
+  text-transform: uppercase; /* Convert text to uppercase */
+  text-align: center; /* Center align the text */
+  padding: 20px; /* Add padding to create space around the text */
+  background-color: #4a90e2; /* Set background color */
+  border-radius: 10px; /* Add border radius for rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Add box shadow for depth */
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
 
 /*Dashboard styles*/
@@ -181,8 +231,8 @@ button:hover {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.carousel-indicators{
-  position:fixed
+.carousel-indicators {
+  position: fixed;
 }
 
 /* .carousel-caption {
