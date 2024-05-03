@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const jsonServer = "http://localhost:3000/users";
-
+import urlStrings from "../../urls.json"
 /*
 npx json-server --watch db.json --port 3000
 */
@@ -104,7 +103,7 @@ function SignUpPage({
 
       if (isEverythingOk) {
         axios
-          .post(`${jsonServer}`, formData)
+          .post(`${urlStrings.jsonServer}`, formData)
           .then((response) => {
             handleLogin(response.data, undefined);
             navigate(`/ticker`);

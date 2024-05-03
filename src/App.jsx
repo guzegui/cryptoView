@@ -10,14 +10,7 @@ import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
 import HeroCarousel from "./components/HeroCarousel";
 import Alert from "react-bootstrap/Alert";
-
-const testApi = "https://api.coincap.io/v2/assets";
-
-const jsonServer = "http://localhost:3000/users";
-
-/*
-npx json-server --watch db.json --port 3000
-*/
+import urlStrings from "../urls.json";
 
 function App() {
   const [tableInfo, setTableInfo] = useState({});
@@ -114,7 +107,7 @@ function App() {
 
   const fetchData = () => {
     axios
-      .get(testApi)
+      .get(urlStrings.cryptoAPI)
       .then((response) => {
         const data = response.data;
 
@@ -161,7 +154,7 @@ function App() {
 
   // Load users from jsonserver
   useEffect(() => {
-    axios.get(jsonServer).then((response) => {
+    axios.get(urlStrings.jsonServer).then((response) => {
       const users = response.data;
       setUsers(users);
     });
@@ -173,7 +166,7 @@ function App() {
       setUser(formData);
     } else {
       axios
-        .get(`${jsonServer}/${user.id}`)
+        .get(`${urlStrings.jsonServer}/${user.id}`)
         .then((response) => {
           const data = response.data;
           localStorage.setItem("loggedInUser", JSON.stringify(data));
@@ -228,6 +221,15 @@ function App() {
   }
 
   const alertMessage = (onClose) => {
+    if (alertInfo.type === "noBalance") {
+      let messageRendered = "You did not specify an amount!";
+      return (
+        <Alert variant="warning" onClose={onClose} dismissible>
+          <Alert.Heading>Error</Alert.Heading>
+          <p>{messageRendered}</p>
+        </Alert>
+      );
+    }
     if (alertInfo.type === "tickerBalance") {
       let messageRendered = "Insufficient balance!";
       return (

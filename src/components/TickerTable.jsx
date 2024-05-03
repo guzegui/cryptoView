@@ -146,7 +146,7 @@ function TickerTable({
                               (currency) =>
                                 currency !== coin.id && (
                                   <option key={currency} value={currency}>
-                                    {currency}
+                                    {capitalizeFirstLetter(currency)}
                                   </option>
                                 )
                             )}
@@ -163,7 +163,7 @@ function TickerTable({
 
                           {/* Calculate the amount that the available balance would buy */}
                           <div>
-                            {coin.name} Amount:
+                            {capitalizeFirstLetter(coin.name)} Amount:
                             {calculateAmount(
                               tradeData.fromCoin,
                               coin,

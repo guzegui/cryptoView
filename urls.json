@@ -1,0 +1,4 @@
+{
+    "jsonServer": "https://cryptoview-jsonserver.adaptable.app/users",
+    "cryptoAPI": "https://api.coincap.io/v2/assets"
+  }

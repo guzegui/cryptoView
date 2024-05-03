@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 
-const jsonServer = "http://localhost:3000/users";
+import urlStrings from "../../urls.json";
+
 
 function DashboardPage({
   user,
@@ -14,7 +15,7 @@ function DashboardPage({
   const id = localStorage.getItem("loggedInUser").slice(7, 11);
 
   useEffect(() => {
-    axios.get(`${jsonServer}/${id}`).then((response) => {
+    axios.get(`${urlStrings.jsonServer}/${id}`).then((response) => {
       const user = response.data;
       setUser(user);
     });
@@ -142,27 +143,28 @@ function DashboardPage({
               <div className="panel-content">
                 <h2 className="panel-title">Currencies</h2>
                 <div className="currency-list">
-  {currencyData.map(([key, value]) => (
-    <div key={key} className="currency-item">
-      <span className="currency-label">
-        {capitalizeFirstLetter(key)}:
-      </span>
-      <span className="currency-value">
-        {key !== "dollars" ? (
-          <>
-            {Object.entries(user.balance).find(
-              (element) => element[0] === key
-            )[1]} = (
-            {formatPrice(value)})
-          </>
-        ) : (
-          `$${addCommasToThousands(value)}`
-        )}
-      </span>
-    </div>
-  ))}
-</div>
-
+                  {currencyData.map(([key, value]) => (
+                    <div key={key} className="currency-item">
+                      <span className="currency-label">
+                        {capitalizeFirstLetter(key)}:
+                      </span>
+                      <span className="currency-value">
+                        {key !== "dollars" ? (
+                          <>
+                            {
+                              Object.entries(user.balance).find(
+                                (element) => element[0] === key
+                              )[1]
+                            }{" "}
+                            = ({formatPrice(value)})
+                          </>
+                        ) : (
+                          `$${addCommasToThousands(value)}`
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

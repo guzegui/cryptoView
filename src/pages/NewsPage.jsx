@@ -6,6 +6,15 @@ const url = "https://corsproxy.io/?https://cointelegraph.com/rss"; // Using the 
 function NewsPage() {
   const [news, setNews] = useState([]);
 
+  function parseHtmlEntities(htmlString) {
+    return htmlString
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'");
+  }
+
   const fetchFeed = () => {
     axios
       .get(url)
@@ -66,35 +75,35 @@ function NewsPage() {
         Load More News
       </button>
       <ul className="list-group">
-  {news.map((item, index) => (
-    <li key={index} className="list-group-item">
-      <div className="row">
-        <div className="col-md-3">
-          <img
-            src={item.imageSource}
-            alt="News"
-            className="img-fluid"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        </div>
-        <div className="col-md-9">
-          <h2>{item.title}</h2>
-          <p>{item.textContent}</p>
-          <p>Category: {item.category}</p>
-          <p>Publication Date: {item.pubDate}</p>
-          <a
-            href={item.link}
-            className="btn btn-primary"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Read more
-          </a>
-        </div>
-      </div>
-    </li>
-  ))}
-</ul>
+        {news.map((item, index) => (
+          <li key={index} className="list-group-item">
+            <div className="row">
+              <div className="col-md-3">
+                <img
+                  src={item.imageSource}
+                  alt="News"
+                  className="img-fluid"
+                  style={{ maxWidth: "100%", height: "auto" }}
+                />
+              </div>
+              <div className="col-md-9">
+                <h2>{parseHtmlEntities(item.title)}</h2>
+                <p>{parseHtmlEntities(item.textContent)}</p>
+                <p>Category: {item.category}</p>
+                <p>Publication Date: {item.pubDate}</p>
+                <a
+                  href={item.link}
+                  className="btn btn-primary"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Read more
+                </a>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

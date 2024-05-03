@@ -7,8 +7,9 @@ import SortIcon from "@mui/icons-material/Sort";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import TickerTable from "../components/TickerTable";
+import urlStrings from "../../urls.json";
 
-const jsonServer = "http://localhost:3000/users";
+
 
 function HomePage({
   tableInfo,
@@ -153,16 +154,12 @@ function HomePage({
     e.preventDefault();
     // Check if the trade amount is greater than the available balance
 
-    // Throw alert with trading info
-    alert(
-      `You are trading ${tradeData.fromCoinAmount} ${tradeData.fromCoin} for ${
-        tradeData.toCoinAmount
-      } ${tradeData.toCoin}. After this trade, you'll have ${
-        testUser.balance[tradeData.fromCoin] - tradeData.fromCoinAmount
-      } ${tradeData.fromCoin} and ${
-        testUser.balance[tradeData.toCoin] + parseFloat(tradeData.toCoinAmount)
-      } ${tradeData.toCoin} left`
-    );
+    if (parseFloat(tradeData.fromCoinAmount) <= 0) {
+      setShowAlerts(true);
+      setAlertInfo({ type: "noBalance" });
+      return;
+    }
+
     if (
       parseFloat(tradeData.fromCoinAmount) ==
       testUser.balance[tradeData.fromCoin]
@@ -181,7 +178,7 @@ function HomePage({
       };
 
       // Make the Axios request to update the user's balance with the updated balance object
-      makeTrade(`${jsonServer}/${testUser.id}`, updatedUser);
+      makeTrade(`${urlStrings.jsonServer}/${testUser.id}`, updatedUser);
     } else {
       // Perform trade logic here
 
@@ -212,7 +209,7 @@ function HomePage({
         };
       }
 
-      makeTrade(`${jsonServer}/${testUser.id}`, updatedUser);
+      makeTrade(`${urlStrings.jsonServer}/${testUser.id}`, updatedUser);
 
       // Reset trade amount and hide trade form
       setTradeData({

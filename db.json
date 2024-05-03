@@ -6,10 +6,11 @@
       "email": "example@example.com",
       "password": "example1!",
       "balance": {
-        "dollars": 98990000,
+        "dollars": null,
         "bitcoin": 26.72236949,
         "litecoin": 10,
-        "dogecoin": 10
+        "dogecoin": 10,
+        "": null
       }
     },
     {
