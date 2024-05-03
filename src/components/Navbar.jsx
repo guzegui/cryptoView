@@ -64,7 +64,7 @@ function Navbar({
           >
             <img
               className="logo"
-              src="/public/cryptoBackground.png"
+              src="../../assets/cryptoBackground.png"
               alt="logo"
               style={{ marginRight: "10px" }}
             />
