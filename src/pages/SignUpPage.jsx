@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,14 +9,7 @@ import urlStrings from "../../urls.json";
 npx json-server --watch db.json --port 3000
 */
 
-function SignUpPage({
-  handleLogin,
-  users,
-  alertMessage,
-  setShowAlerts,
-  showAlerts,
-  setAlertInfo,
-}) {
+function SignUpPage({ handleLogin, users, setShowAlerts, setAlertInfo }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -37,7 +29,7 @@ function SignUpPage({
   // Email should be "example@example.com". Dashes are valid
   // Passwords should have at least 8 characters, and contain letters, special characters and numbers
   const regexCheck = (email, password) => {
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -99,22 +91,23 @@ function SignUpPage({
         } else {
           type = "Email already exists";
         }
-      }
-
-      if (isEverythingOk) {
-        axios
-          .post(`${urlStrings.jsonServer}`, formData)
-          .then((response) => {
-            handleLogin(response.data, undefined);
-            navigate(`/ticker`);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
       } else {
-        setShowAlerts(true);
-        setAlertInfo({ type: type });
+        isEverythingOk = true;
       }
+    }
+    if (isEverythingOk) {
+      axios
+        .post(`${urlStrings.jsonServer}`, formData)
+        .then((response) => {
+          handleLogin(response.data, undefined);
+          navigate(`/ticker`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      setShowAlerts(true);
+      setAlertInfo({ type: type });
     }
   };
 
