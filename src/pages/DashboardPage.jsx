@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 
 import urlStrings from "../../urls.json";
-
 
 function DashboardPage({
   user,
@@ -30,23 +29,7 @@ function DashboardPage({
       } else {
         const coin = tableInfo.data.find((element) => element.id === key);
         if (coin) {
-          console.log("the coin is " + coin.id);
-          console.log(
-            "the value is " + value + " which is of type " + typeof value
-          );
           const coinTimesValue = coin.priceUsd * value;
-          console.log(
-            "the product is " +
-              coinTimesValue +
-              "which is of type " +
-              typeof coinTimesValue
-          );
-          console.log(
-            "the value is " +
-              coin.priceUsd +
-              " which is of type " +
-              typeof coin.priceUsd
-          );
           return [coin.id, coinTimesValue.toString()];
         } else {
           return null; // if data is not found
@@ -61,41 +44,12 @@ function DashboardPage({
     if (!currencyData) return "";
     return currencyData.reduce((accumulator, [key, value]) => {
       if (key === "dollars") {
-        console.log(
-          "Accumulator was " +
-            accumulator +
-            " and value is " +
-            value +
-            " which is of type " +
-            typeof value
-        );
         return accumulator + value;
       } else {
-        console.log(
-          "Accumulator was " +
-            accumulator +
-            " and value is " +
-            value +
-            " which is of type " +
-            typeof value
-        );
         return accumulator + parseFloat(value);
       }
     }, 0);
   };
-
-  /*
-  {currencyData.reduce((accumulator, currentValue) => {
-              accumulator + currentValue.x;
-            }, 0)}
-  
-  
-  */
-
-  console.log(
-    Object.entries(user.balance).find((element) => element[0] === "dollars")
-  );
-
   return (
     <div className="dashboard-container">
       {!user || !user.balance || !currencyData ? (

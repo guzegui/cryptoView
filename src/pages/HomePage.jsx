@@ -1,19 +1,12 @@
-import PropTypes from "prop-types";
 import moment from "moment";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SortIcon from "@mui/icons-material/Sort";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import TickerTable from "../components/TickerTable";
 import urlStrings from "../../urls.json";
 
-
-
 function HomePage({
   tableInfo,
-  previousTableInfo,
   addCommasToThousands,
   user,
   formatPrice,
@@ -110,41 +103,26 @@ function HomePage({
   }
 
   function calculateAmount(selectedCurrency, coin, tradeAmount) {
-    console.log(tradeAmount);
-    console.log(selectedCurrency);
     let conversion;
     if (selectedCurrency === "dollars") {
       conversion = (tradeAmount / coin.priceUsd).toFixed(8);
     } else {
       const currency = data.find((element) => element.id === selectedCurrency);
-
-      /*
-        setTradeData({
-      ...tradeData,
-      [name]: value,
-    });
-      */
       conversion = ((currency.priceUsd * tradeAmount) / coin.priceUsd).toFixed(
         8
       );
     }
-    // setTradeData({
-    //   ...tradeData,
-    //   toCoinAmount: conversion,
-    //   toCoin: coin,
-    // });
+
     return conversion;
   }
 
   const makeTrade = (url, updatedUser) => {
     axios
       .put(url, updatedUser)
-      .then((response) => {
-        // Handle success response
+      .then(() => {
         localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
       })
       .catch((error) => {
-        // Handle error
         console.log("Error:", error);
       });
   };
@@ -164,7 +142,6 @@ function HomePage({
       parseFloat(tradeData.fromCoinAmount) ==
       testUser.balance[tradeData.fromCoin]
     ) {
-      console.log("You ran out of moolah!!");
       // Create a copy of the user's balance object
       const updatedBalance = { ...testUser.balance };
 
@@ -265,19 +242,6 @@ function HomePage({
     return data;
   };
 
-  //   useEffect(() => {
-
-  //     setTradeData({
-  // ...tradeData,
-  // toCoinAmount: (calculateAmount(
-  //   tradeData.fromCoin,
-  //   tradeFormVisible.id,
-  //   tradeData.fromCoinAmount
-  // )),
-  // toCoin: tradeFormVisible.id,
-  // });
-  // }, [tableInfo, tradeFormVisible, tradeData]);
-
   return (
     <div>
       {localTime == "Invalid date" ? (
@@ -311,29 +275,5 @@ function HomePage({
     </div>
   );
 }
-
-HomePage.propTypes = {
-  tableInfo: PropTypes.shape({
-    id: PropTypes.number,
-    rank: PropTypes.number,
-    symbol: PropTypes.string,
-    name: PropTypes.string,
-    priceUsd: PropTypes.string,
-    volumeUsd24Hr: PropTypes.string,
-    marketCapUsd: PropTypes.string,
-    availableSupply: PropTypes.string,
-    totalSupply: PropTypes.string,
-    changePercent24Hr: PropTypes.string,
-    vwap24Hr: PropTypes.string,
-    explorer: PropTypes.string,
-    timestamp: PropTypes.number,
-  }).isRequired,
-  previousTableInfo: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      priceUsd: PropTypes.string,
-    })
-  ).isRequired,
-};
 
 export default HomePage;

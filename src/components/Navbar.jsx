@@ -91,7 +91,7 @@ function Navbar({
                       backgroundColor: "transparent",
                       border: "none",
                       fontSize: "20px",
-                    }} // Set font size to 16px
+                    }} 
                   >
                     Login
                   </button>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-import urlStrings from "../../urls.json"
+import urlStrings from "../../urls.json";
 /*
 npx json-server --watch db.json --port 3000
 */

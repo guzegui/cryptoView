@@ -1,4 +1,3 @@
-import React from "react";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SortIcon from "@mui/icons-material/Sort";
@@ -20,10 +19,6 @@ function TickerTable({
   capitalizeFirstLetter,
   addCommasToThousands,
   formatPrice,
-  alertMessage,
-  setShowAlerts,
-  showAlerts,
-  setAlertInfo,
 }) {
   return (
     <div>

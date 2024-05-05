@@ -14,12 +14,10 @@ import urlStrings from "../urls.json";
 
 function App() {
   const [tableInfo, setTableInfo] = useState({});
-  const [previousTableInfo, setPreviousTableInfo] = useState([]);
   const [users, setUsers] = useState({});
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("loggedInUser"))
   );
-  const [changes, setChanges] = useState([]);
   const [showAlerts, setShowAlerts] = useState(false);
   const [alertInfo, setAlertInfo] = useState({});
   const navigate = useNavigate();
@@ -70,8 +68,6 @@ function App() {
       }
     });
 
-    // time difference is between 3 and 5 minutes in dev tools but console.log every 2 seconds
-
     return newChanges;
   };
 
@@ -80,9 +76,7 @@ function App() {
   }
 
   const addChangesToTableInfo = (changes, tableInfo, timestamp) => {
-    // Iterate over each change
     changes.forEach((change) => {
-      // Find the index of the coin in the tableInfo data array
       const index = tableInfo.data.findIndex((coin) => coin.id === change.id);
 
       // If the coin is found in the tableInfo data array
@@ -92,8 +86,8 @@ function App() {
 
         // Update the corresponding entry in the tableInfo data array
         tableInfo.data[index] = {
-          ...tableInfo.data[index], // Keep existing coin info
-          ...changeInfo, // Add new info from the change
+          ...tableInfo.data[index],
+          ...changeInfo,
         };
       }
     });
@@ -101,7 +95,6 @@ function App() {
     // Update the timestamp in tableInfo
     tableInfo.timestamp = timestamp;
 
-    // Return the updated tableInfo
     return tableInfo;
   };
 
@@ -115,7 +108,6 @@ function App() {
         if (Object.keys(tableInfo).length === 0) {
           setTableInfo(data);
         } else {
-          // Compare current data with previous data
           const newChanges = findPriceChanges(data, tableInfo);
 
           // Update current data if there are changes
@@ -222,7 +214,7 @@ function App() {
 
   const alertMessage = (onClose) => {
     if (alertInfo.type === "noBalance") {
-      let messageRendered = "You did not specify an amount!";
+      let messageRendered = "Invalid amount!";
       return (
         <Alert variant="warning" onClose={onClose} dismissible>
           <Alert.Heading>Error</Alert.Heading>
@@ -246,8 +238,6 @@ function App() {
         </Alert>
       );
     }
-
-    // types are logIn, tradeError, tradeSuccess, signUp
   };
 
   return (
@@ -268,7 +258,6 @@ function App() {
           element={
             <HomePage
               tableInfo={tableInfo}
-              previousTableInfo={previousTableInfo}
               addCommasToThousands={addCommasToThousands}
               user={user}
               formatPrice={formatPrice}

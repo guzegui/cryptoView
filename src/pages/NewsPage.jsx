@@ -54,7 +54,6 @@ function NewsPage() {
         );
 
         setNews(newsItems);
-        console.log(newsItems);
       })
       .catch((error) => {
         console.error("Error fetching RSS feed:", error);

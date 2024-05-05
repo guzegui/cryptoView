@@ -27,7 +27,7 @@ function HeroCarousel() {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src="../../assets/carousel-imgs/crypto_graph.jpg"
+            src="/carousel-imgs/crypto_graph.jpg"
             alt="First slide"
             onLoad={handleImageLoad}
             style={{ display: imagesLoaded ? "block" : "none" }}
@@ -45,7 +45,7 @@ function HeroCarousel() {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src="../../assets/carousel-imgs/crypto_logos.jpg"
+            src="/carousel-imgs/crypto_logos.jpg"
             alt="Second slide"
             onLoad={handleImageLoad}
             style={{ display: imagesLoaded ? "block" : "none" }}
@@ -61,7 +61,7 @@ function HeroCarousel() {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src="../../assets/carousel-imgs/crypto_vignettes.jpg"
+            src="/carousel-imgs/crypto_vignettes.jpg"
             alt="Third slide"
             onLoad={handleImageLoad}
             style={{ display: imagesLoaded ? "block" : "none" }}
