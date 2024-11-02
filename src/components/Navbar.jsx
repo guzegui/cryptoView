@@ -51,8 +51,6 @@ function Navbar({
     handleLogin(undefined, user);
   };
 
-  // navbar navbar-default navbar-static-top
-
   return (
     <>
       <nav className="navbar navbar-dark bg-dark mb-3">

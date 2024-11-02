@@ -10,7 +10,6 @@ import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
 import HeroCarousel from "./components/HeroCarousel";
 import Alert from "react-bootstrap/Alert";
-import urlStrings from "../urls.json";
 
 function App() {
   const [tableInfo, setTableInfo] = useState({});
@@ -100,7 +99,9 @@ function App() {
 
   const fetchData = () => {
     axios
-      .get(urlStrings.cryptoAPI)
+      .get(
+        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_CRYPTO_API}`
+      )
       .then((response) => {
         const data = response.data;
 
@@ -144,12 +145,14 @@ function App() {
     return () => clearInterval(intervalId);
   }, [tableInfo]);
 
-  // Load users from jsonserver
+  // Load users from server
   useEffect(() => {
-    axios.get(urlStrings.jsonServer).then((response) => {
-      const users = response.data;
-      setUsers(users);
-    });
+    axios
+      .get(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}`)
+      .then((response) => {
+        const users = response.data;
+        setUsers(users);
+      });
   }, []);
 
   function handleLogin(formData, user) {
@@ -158,7 +161,11 @@ function App() {
       setUser(formData);
     } else {
       axios
-        .get(`${urlStrings.jsonServer}/${user.id}`)
+        .get(
+          `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${
+            user._id
+          }`
+        )
         .then((response) => {
           const data = response.data;
           localStorage.setItem("loggedInUser", JSON.stringify(data));

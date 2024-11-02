@@ -3,7 +3,6 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TickerTable from "../components/TickerTable";
-import urlStrings from "../../urls.json";
 
 function HomePage({
   tableInfo,
@@ -155,7 +154,12 @@ function HomePage({
       };
 
       // Make the Axios request to update the user's balance with the updated balance object
-      makeTrade(`${urlStrings.jsonServer}/${testUser.id}`, updatedUser);
+      makeTrade(
+        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${
+          testUser._id
+        }`,
+        updatedUser
+      );
     } else {
       // Perform trade logic here
 
@@ -186,7 +190,12 @@ function HomePage({
         };
       }
 
-      makeTrade(`${urlStrings.jsonServer}/${testUser.id}`, updatedUser);
+      makeTrade(
+        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${
+          testUser._id
+        }`,
+        updatedUser
+      );
 
       // Reset trade amount and hide trade form
       setTradeData({

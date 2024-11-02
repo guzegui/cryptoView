@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const url = "https://corsproxy.io/?https://cointelegraph.com/rss"; // Using the provided URL
-
 function NewsPage() {
   const [news, setNews] = useState([]);
 
@@ -17,7 +15,9 @@ function NewsPage() {
 
   const fetchFeed = () => {
     axios
-      .get(url)
+      .get(
+        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_NEWS_API}`
+      )
       .then((response) => {
         const feed = response.data;
 

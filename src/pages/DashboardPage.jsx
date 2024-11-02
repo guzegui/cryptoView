@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import axios from "axios";
 
-import urlStrings from "../../urls.json";
-
 function DashboardPage({
   user,
   setUser,
@@ -11,13 +9,17 @@ function DashboardPage({
   formatPrice,
   capitalizeFirstLetter,
 }) {
-  const id = localStorage.getItem("loggedInUser").slice(7, 11);
+  const id = JSON.parse(localStorage.getItem('loggedInUser'))._id;
 
   useEffect(() => {
-    axios.get(`${urlStrings.jsonServer}/${id}`).then((response) => {
-      const user = response.data;
-      setUser(user);
-    });
+    axios
+      .get(
+        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${id}`
+      )
+      .then((response) => {
+        const user = response.data;
+        setUser(user);
+      });
   }, [id, setUser]);
 
   const getCurrencyData = () => {
@@ -68,7 +70,7 @@ function DashboardPage({
                 <div className="info-list">
                   <div className="info-item">
                     <span className="info-label">🆔 ID:</span>
-                    <span className="info-value">{user.id}</span>
+                    <span className="info-value">{user._id}</span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">👤 Username:</span>
@@ -110,7 +112,7 @@ function DashboardPage({
                                 (element) => element[0] === key
                               )[1]
                             }{" "}
-                            = ({formatPrice(value)})
+                            = (${formatPrice(value)})
                           </>
                         ) : (
                           `$${addCommasToThousands(value)}`

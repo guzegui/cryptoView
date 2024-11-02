@@ -117,15 +117,17 @@ function TickerTable({
                   >
                     {parseFloat(coin.changePercent24Hr).toFixed(2)} %
                   </td>
-                  {coin.priceDiff && (
-                    <td
-                      className={
-                        coin.priceDiff < 0 ? "text-danger" : "text-success"
-                      }
-                    >
-                      {formatPrice(coin.priceDiff.toString())}
-                    </td>
-                  )}
+                  {coin.priceDiff &&
+                    (coin.priceDiff < 0 ? (
+                      <td className="text-danger">
+                        - {formatPrice(coin.priceDiff.toString().slice(1))}
+                      </td>
+                    ) : (
+                      <td className="text-success">
+                        + {formatPrice(coin.priceDiff.toString())}
+                      </td>
+                    ))}
+
                   {loggedInUser && (
                     <td>
                       {/* Render trade button or trade form */}

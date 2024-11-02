@@ -4,11 +4,6 @@ import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-import urlStrings from "../../urls.json";
-/*
-npx json-server --watch db.json --port 3000
-*/
-
 function SignUpPage({ handleLogin, users, setShowAlerts, setAlertInfo }) {
   const [formData, setFormData] = useState({
     username: "",
@@ -97,7 +92,10 @@ function SignUpPage({ handleLogin, users, setShowAlerts, setAlertInfo }) {
     }
     if (isEverythingOk) {
       axios
-        .post(`${urlStrings.jsonServer}`, formData)
+        .post(
+          `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/signup`,
+          formData
+        )
         .then((response) => {
           handleLogin(response.data, undefined);
           navigate(`/ticker`);
@@ -158,34 +156,3 @@ function SignUpPage({ handleLogin, users, setShowAlerts, setAlertInfo }) {
 }
 
 export default SignUpPage;
-
-/*
-
-
-
-*/
-
-/*
-<form>
-      <div className="form-group">
-        <label htmlFor="exampleInputEmail1">Email address</label>
-        <input type="email" className="form-control" id="exampleInputEmail1" placeholder="Email" />
-      </div>
-      <div className="form-group">
-        <label htmlFor="exampleInputPassword1">Password</label>
-        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
-      </div>
-      <div className="form-group">
-        <label htmlFor="exampleInputFile">File input</label>
-        <input type="file" id="exampleInputFile" />
-        <p className="help-block">Example block-level help text here.</p>
-      </div>
-      <div className="checkbox">
-        <label>
-          <input type="checkbox" /> Check me out
-        </label>
-      </div>
-      <button type="submit" className="btn btn-default">Submit</button>
-    </form>
-
-*/
