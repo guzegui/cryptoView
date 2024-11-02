@@ -155,7 +155,7 @@ function HomePage({
 
       // Make the Axios request to update the user's balance with the updated balance object
       makeTrade(
-        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${
+        `${process.env.VITE_SERVER_URL}/${process.env.VITE_DB}/${
           testUser._id
         }`,
         updatedUser
@@ -191,7 +191,7 @@ function HomePage({
       }
 
       makeTrade(
-        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${
+        `${process.env.VITE_SERVER_URL}/${process.env.VITE_DB}/${
           testUser._id
         }`,
         updatedUser

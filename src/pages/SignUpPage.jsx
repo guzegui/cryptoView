@@ -93,7 +93,7 @@ function SignUpPage({ handleLogin, users, setShowAlerts, setAlertInfo }) {
     if (isEverythingOk) {
       axios
         .post(
-          `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/signup`,
+          `${process.env.VITE_SERVER_URL}/${process.env.VITE_DB}/signup`,
           formData
         )
         .then((response) => {

@@ -14,7 +14,7 @@ function DashboardPage({
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${id}`
+        `${process.env.VITE_SERVER_URL}/${process.env.VITE_DB}/${id}`
       )
       .then((response) => {
         const user = response.data;

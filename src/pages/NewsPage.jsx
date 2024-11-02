@@ -16,7 +16,7 @@ function NewsPage() {
   const fetchFeed = () => {
     axios
       .get(
-        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_NEWS_API}`
+        `${process.env.VITE_SERVER_URL}/${process.env.VITE_NEWS_API}`
       )
       .then((response) => {
         const feed = response.data;

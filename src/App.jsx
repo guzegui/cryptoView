@@ -100,7 +100,7 @@ function App() {
   const fetchData = () => {
     axios
       .get(
-        `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_CRYPTO_API}`
+        `${process.env.VITE_SERVER_URL}/${process.env.VITE_CRYPTO_API}`
       )
       .then((response) => {
         const data = response.data;
@@ -148,7 +148,7 @@ function App() {
   // Load users from server
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}`)
+      .get(`${process.env.VITE_SERVER_URL}/${process.env.VITE_DB}`)
       .then((response) => {
         const users = response.data;
         setUsers(users);
@@ -162,7 +162,7 @@ function App() {
     } else {
       axios
         .get(
-          `${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_DB}/${
+          `${process.env.VITE_SERVER_URL}/${process.env.VITE_DB}/${
             user._id
           }`
         )
